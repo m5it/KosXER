@@ -1,0 +1,16 @@
+Plan: KosXER - GUI Configuration Editor for X Resources and XML
+Progress: 1/13 completed (0 blocked)
+--- Current Task ---
+ID: 1784086139.8900323
+Title: (no title)
+Instruction: Create parsers/xresources_parser.py that:
+- Parses .Xresources and .Xdefaults files
+- Handles X11 resource format: resource.class*subresource: value
+- Supports includes (#include, #ifdef, #endif)
+- Returns structured data: list of {resource_path, value, comment, line_number}
+- Provides write_back() method to regenerate file
+- Handle special cases: escaped newlines, comments, empty lines
+
+Include a test file parsers/test_xresources.py with sample Xresources data to verify parsing.
+Status: in_progress
+Updated: 2026-07-15 03:39:53

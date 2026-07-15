@@ -1,0 +1,14 @@
+# KosXER - X11 Configuration Editor
+# Python 3.9+ required
+
+# Core dependencies (stdlib only for base)
+# tkinter is included with Python standard library
+
+# Optional dependencies for enhanced functionality
+# colorama>=0.4.6  # Windows color support (optional)
+
+# Development dependencies
+# pytest>=7.0.0
+# pytest-cov>=4.0.0
+# black>=23.0.0
+# flake8>=6.0.0
