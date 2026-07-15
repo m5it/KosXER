@@ -1,0 +1,71 @@
+! Sample XResources file for KosXER
+! This is a demonstration file showing various X11 resource configurations
+
+! ============================================
+! XTerm Configuration
+! ============================================
+
+! Basic colors
+XTerm*background: #1a1a1a
+XTerm*foreground: #d0d0d0
+XTerm*cursorColor: #00ff00
+
+! Font settings
+XTerm*faceName: Monospace
+XTerm*faceSize: 10
+XTerm*renderFont: true
+
+! Terminal behavior
+XTerm*scrollBar: false
+XTerm*saveLines: 10000
+XTerm*visualBell: true
+
+! ============================================
+! URxvt Configuration
+! ============================================
+
+URxvt*background: #1a1a1a
+URxvt*foreground: #d0d0d0
+URxvt*font: xft:Monospace:size=10
+URxvt*scrollBar: false
+URxvt*transparent: false
+
+! ============================================
+! Terminal Colors (Solarized Dark)
+! ============================================
+
+! Standard colors
+*.color0:  #073642
+*.color1:  #dc322f
+*.color2:  #859900
+*.color3:  #b58900
+*.color4:  #268bd2
+*.color5:  #d33682
+*.color6:  #2aa198
+*.color7:  #eee8d5
+
+! Bright colors
+*.color8:  #002b36
+*.color9:  #cb4b16
+*.color10: #586e75
+*.color11: #657b83
+*.color12: #839496
+*.color13: #6c71c4
+*.color14: #93a1a1
+*.color15: #fdf6e3
+
+! ============================================
+! Conditional Configuration
+! ============================================
+
+#ifdef HIGH_DPI
+XTerm*faceSize: 14
+URxvt*font: xft:Monospace:size=14
+#endif
+
+! ============================================
+! Include other files (uncomment to use)
+! ============================================
+
+! #include ".Xresources.d/colors"
+! #include ".Xresources.d/fonts"

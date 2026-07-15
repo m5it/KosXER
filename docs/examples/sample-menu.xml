@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openbox_menu xmlns="http://openbox.org/3.4/menu">
+
+    
+    <menu id="root-menu" label="Openbox 3">
+        
+        
+        <item label="Terminal">
+            <action name="Execute">
+                <command>xterm</command>
+            </action>
+        </item>
+        
+        <item label="URxvt">
+            <action name="Execute">
+                <command>urxvt</command>
+            </action>
+        </item>
+        
+        
+        <separator/>
+        
+        
+        <item label="Web Browser">
+            <action name="Execute">
+                <command>firefox</command>
+            </action>
+        </item>
+        
+        
+        <separator/>
+        
+        
+        <menu id="apps-menu" label="Applications">
+            <item label="File Manager">
+                <action name="Execute">
+                    <command>thunar</command>
+                </action>
+            </item>
+            
+            <item label="Text Editor">
+                <action name="Execute">
+                    <command>mousepad</command>
+                </action>
+            </item>
+            
+            <item label="Calculator">
+                <action name="Execute">
+                    <command>galculator</command>
+                </action>
+            </item>
+        </menu>
+        
+        
+        <menu id="pref-menu" label="Preferences">
+            <item label="Openbox Configuration">
+                <action name="Execute">
+                    <command>obconf</command>
+                </action>
+            </item>
+            
+            <item label="Tint2 Panel">
+                <action name="Execute">
+                    <command>tint2conf</command>
+                </action>
+            </item>
+            
+            <separator/>
+            
+            <item label="Edit Autostart">
+                <action name="Execute">
+                    <command>mousepad ~/.config/openbox/autostart</command>
+                </action>
+            </item>
+        </menu>
+        
+        
+        <separator/>
+        
+        
+        <item label="Reconfigure">
+            <action name="Reconfigure"/>
+        </item>
+        
+        <item label="Restart">
+            <action name="Restart"/>
+        </item>
+        
+        <separator/>
+        
+        <item label="Exit">
+            <action name="Exit">
+                <prompt>yes</prompt>
+            </action>
+        </item>
+        
+    </menu>
+
+</openbox_menu>

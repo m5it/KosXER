@@ -1,14 +1,43 @@
 """
-Utilities package for KosXER.
+Utilities module for KosXER.
 
-Helper functions and common utilities.
+Contains backup management, validation, and helper functions.
 """
 
-from .backup import BackupManager
-from .validators import validate_color, validate_font
+from .backup import (
+    BackupManager,
+    SafeFileWriter,
+    create_backup_before_edit,
+    restore_from_backup,
+    safe_write
+)
+
+from .validation import (
+    ValidationManager,
+    SyntaxValidator,
+    XResourcesValidator,
+    OpenBoxMenuValidator,
+    KeyValueValidator,
+    ValidationError,
+    validate_before_save,
+    quick_validate
+)
 
 __all__ = [
+    # Backup
     'BackupManager',
-    'validate_color',
-    'validate_font',
+    'SafeFileWriter',
+    'create_backup_before_edit',
+    'restore_from_backup',
+    'safe_write',
+    
+    # Validation
+    'ValidationManager',
+    'SyntaxValidator',
+    'XResourcesValidator',
+    'OpenBoxMenuValidator',
+    'KeyValueValidator',
+    'ValidationError',
+    'validate_before_save',
+    'quick_validate',
 ]
