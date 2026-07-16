@@ -1,14 +1,21 @@
 # KosXER - X11 Configuration Editor
 # Python 3.9+ required
 
-# Core dependencies (stdlib only for base)
-# tkinter is included with Python standard library
+# Core dependencies
+# tkinter is included with Python standard library on most systems
+# On Debian/Ubuntu: sudo apt-get install python3-tk
+# On Fedora: sudo dnf install python3-tkinter
+# On Arch: sudo pacman -S tk
 
-# Optional dependencies for enhanced functionality
+# Optional: File watching for detecting external changes
+watchdog>=3.0.0
+
+# Optional: Enhanced color handling
 # colorama>=0.4.6  # Windows color support (optional)
 
-# Development dependencies
+# Development dependencies (install with: pip install -r requirements.txt[dev])
 # pytest>=7.0.0
 # pytest-cov>=4.0.0
 # black>=23.0.0
 # flake8>=6.0.0
+# mypy>=1.0.0
