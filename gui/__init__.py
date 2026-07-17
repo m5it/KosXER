@@ -10,6 +10,8 @@ from .file_browser import FileBrowser
 from .xresources_editor import XResourcesEditor
 from .openbox_editor import OpenBoxEditor
 from .kv_editor import KVEditor
+from .kosdwm_config_editor import KosDWMConfigEditor
+from .kosdwm_menu_editor import KosDWMMenuEditor
 
 __all__ = [
     'MainWindow',
@@ -19,4 +21,6 @@ __all__ = [
     'XResourcesEditor',
     'OpenBoxEditor',
     'KVEditor',
+    'KosDWMConfigEditor',
+    'KosDWMMenuEditor',
 ]

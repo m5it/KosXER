@@ -1,0 +1,54 @@
+{
+  "id": "1784214754.9100733",
+  "title": "Add KosDWM Support to KosXER",
+  "instructions": "KosDWM is a dynamic window manager with:\n- JSON config at ~/.config/KosDWM/config.json (colors, bar_height, layout_mode)\n- Auto-generated menus from folder structure at ~/.config/KosDWM/Menus/\n- Menu items are Python scripts that define menu entries\n- UI theming with active/inactive button colors\n\nGoal: Add full KosDWM support to KosXER including:\n1. Parser for KosDWM config.json\n2. Parser for the dynamic menu structure (folder-based menus)\n3. Editor widgets for both config and menus\n4. Integration with existing parser registry",
+  "startTimestamp": 1784214754.910077,
+  "endTimestamp": 1784215176.6207476,
+  "tasks": {
+    "1784214762.1119437": {
+      "id": "1784214762.1119437",
+      "status": "completed",
+      "instruction": "Create a parser for KosDWM's config.json file:\n- Parse JSON configuration with validation\n- Handle default values for missing keys\n- Support all config options: active_button_bg, inactive_button_bg, bar_height, button_height, combobox_ipady, layout_mode\n- Provide write_back() to save JSON with proper formatting\n- Include color validation for hex colors\n- Create test file parsers/test_kosdwm_config.py with sample data",
+      "startTimestamp": 1784214856.0999718,
+      "endTimestamp": 1784214901.5328038,
+      "log": [
+        {
+          "timestamp": 1784214856.1000705,
+          "text": "Build started"
+        }
+      ]
+    },
+    "1784214766.6056743": {
+      "id": "1784214766.6056743",
+      "status": "completed",
+      "instruction": "Create a parser for KosDWM's dynamic menu structure:\n- Parse folder structure at ~/.config/KosDWM/Menus/\n- Handle menu folders with config.json defining menu properties\n- Parse Python script files that define menu items\n- Support menu hierarchy (nested folders)\n- Extract command info from Python scripts (label, icon, action)\n- Provide write_back() to regenerate menu structure\n- Create test file parsers/test_kosdwm_menu.py with sample menu structure",
+      "startTimestamp": 1784214901.5328064,
+      "endTimestamp": 1784214980.9310803,
+      "log": []
+    },
+    "1784214771.5438101": {
+      "id": "1784214771.5438101",
+      "status": "completed",
+      "instruction": "Create editor widget for KosDWM config.json:\n- Extend EditorWidget base class\n- Form fields for all config options:\n  - Color pickers for active_button_bg and inactive_button_bg\n  - Spinboxes for bar_height, button_height, combobox_ipady\n  - Dropdown for layout_mode (\"buttons\" vs \"comboboxes\")\n- Live preview of color scheme\n- Validate hex colors before saving\n- Update parser registry integration",
+      "startTimestamp": 1784214980.9310832,
+      "endTimestamp": 1784215069.6080577,
+      "log": []
+    },
+    "1784214775.980242": {
+      "id": "1784214775.980242",
+      "status": "completed",
+      "instruction": "Create editor widget for KosDWM dynamic menus:\n- Extend EditorWidget base class\n- Treeview showing menu hierarchy from folder structure\n- Display menu items with icons and commands\n- Add/Delete/Edit menu folders\n- Add/Delete/Edit menu items (Python scripts)\n- Preview of generated menu\n- Integration with file system for live menu editing",
+      "startTimestamp": 1784215069.6080592,
+      "endTimestamp": 1784215154.465287,
+      "log": []
+    },
+    "1784214781.3090127": {
+      "id": "1784214781.3090127",
+      "status": "completed",
+      "instruction": "Update the parser registry to include KosDWM:\n- Register KosDWMConfigParser for config.json in KosDWM directory\n- Register KosDWMMenuParser for Menu folder structures\n- Add file type detection for KosDWM files\n- Update get_file_type_info() to return KosDWM descriptions\n- Export new parser classes in __all__",
+      "startTimestamp": 1784215154.4652877,
+      "endTimestamp": 1784215176.6205912,
+      "log": []
+    }
+  }
+}

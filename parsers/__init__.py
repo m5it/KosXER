@@ -18,6 +18,8 @@ from .openbox_parser import (
     OpenBoxMenu, OpenBoxMenuItem, OpenBoxSeparator
 )
 from .generic_kv_parser import GenericKVParser, KVEntry
+from .kosdwm_config_parser import KosDWMConfigParser, KosDWMConfig
+from .kosdwm_menu_parser import KosDWMMenuParser, MenuItem, MenuFolder
 
 
 class ParserInfo:
@@ -111,6 +113,26 @@ class ParserRegistry:
             patterns=[r'^\.bash.*', r'^\.zsh.*', r'^\.profile$'],
             description="Shell Environment File",
             icon_hint="text-x-script"
+        )
+        
+        # KosDWM Config parser
+        self.register(
+            name="kosdwm_config",
+            parser_class=KosDWMConfigParser,
+            extensions=[],
+            patterns=[r'.*kosdwm.*config\.json$'],
+            description="KosDWM Window Manager Configuration",
+            icon_hint="preferences-system-windows"
+        )
+        
+        # KosDWM Menu parser
+        self.register(
+            name="kosdwm_menu",
+            parser_class=KosDWMMenuParser,
+            extensions=[],
+            patterns=[r'.*kosdwm.*menus.*'],
+            description="KosDWM Dynamic Menu Structure",
+            icon_hint="applications-other"
         )
     
     def register(self, name: str, parser_class: Type,
@@ -308,4 +330,8 @@ __all__ = [
     
     # Generic KV
     'GenericKVParser', 'KVEntry',
+    
+    # KosDWM
+    'KosDWMConfigParser', 'KosDWMConfig',
+    'KosDWMMenuParser', 'MenuItem', 'MenuFolder',
 ]
