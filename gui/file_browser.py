@@ -23,8 +23,28 @@ try:
     from watchdog.observers import Observer
     from watchdog.events import FileSystemEventHandler
     WATCHDOG_AVAILABLE = True
+    
+    class ConfigFileHandler(FileSystemEventHandler):
+        """Handler for file system events."""
+        
+        def __init__(self, callback: Callable):
+            self.callback = callback
+        
+        def on_modified(self, event):
+            if not event.is_directory:
+                self.callback(event.src_path)
+        
+        def on_created(self, event):
+            if not event.is_directory:
+                self.callback(event.src_path)
+        
+        def on_deleted(self, event):
+            self.callback(event.src_path)
+            
 except ImportError:
     WATCHDOG_AVAILABLE = False
+    Observer = None
+    ConfigFileHandler = None
 
 
 @dataclass
@@ -35,24 +55,6 @@ class Bookmark:
     icon: str = "📁"
 
 
-class ConfigFileHandler(FileSystemEventHandler):
-    """Handler for file system events."""
-    
-    def __init__(self, callback: Callable):
-        self.callback = callback
-    
-    def on_modified(self, event):
-        if not event.is_directory:
-            self.callback(event.src_path)
-    
-    def on_created(self, event):
-        if not event.is_directory:
-            self.callback(event.src_path)
-    
-    def on_deleted(self, event):
-        self.callback(event.src_path)
-
-
 class FileBrowser(ttk.Frame):
     """
     File browser widget for navigating configuration files.
@@ -61,7 +63,7 @@ class FileBrowser(ttk.Frame):
     - Tree view of directories with config file filtering
     - Quick access to common config locations
     - Bookmark/favorites system
-    - File watcher for external changes
+    - File watcher for external changes (optional)
     - Context menu with file operations
     """
     
@@ -71,6 +73,7 @@ class FileBrowser(ttk.Frame):
         (".Xresources", Path.home() / ".Xresources", "🎨"),
         (".Xdefaults", Path.home() / ".Xdefaults", "🎨"),
         ("OpenBox", Path.home() / ".config" / "openbox", "📦"),
+        ("KosDWM", Path.home() / ".config" / "KosDWM", "📦"),
         ("i3", Path.home() / ".config" / "i3", "📦"),
         ("bspwm", Path.home() / ".config" / "bspwm", "📦"),
         ("sxhkd", Path.home() / ".config" / "sxhkd", "📦"),
@@ -93,7 +96,7 @@ class FileBrowser(ttk.Frame):
         self.on_file_change = on_file_change
         self.current_path = Path.home()
         self.bookmarks: List[Bookmark] = []
-        self.observer: Optional[Observer] = None
+        self.observer = None
         self.watched_paths: set = set()
         
         self._create_widgets()
@@ -260,11 +263,11 @@ class FileBrowser(ttk.Frame):
         """Check if file is a supported config file."""
         name = path.name.lower()
         extensions = {'.Xresources', '.Xdefaults', '.xml', '.conf', '.rc', 
-                     '.cfg', '.env', '.ini', '.sh', '.bashrc', '.zshrc'}
+                     '.cfg', '.env', '.ini', '.sh', '.bashrc', '.zshrc', '.json'}
         
         if any(name.endswith(ext) for ext in extensions):
             return True
-        if name in {'menu.xml', 'rc.xml', 'tint2rc', 'picom.conf'}:
+        if name in {'menu.xml', 'rc.xml', 'tint2rc', 'picom.conf', 'config.json'}:
             return True
         return False
     
@@ -277,7 +280,7 @@ class FileBrowser(ttk.Frame):
         return f"{size:.1f} GB"
     
     def _open_path(self, path: Path):
-        """Open a path (file or directory)."""
+        """Open a path."""
         if path.is_dir():
             self.current_path = path
             self.path_var.set(str(path))
@@ -360,7 +363,6 @@ class FileBrowser(ttk.Frame):
         """Copy path to clipboard."""
         self.clipboard_clear()
         self.clipboard_append(str(path))
-        self.set_status(f"Copied: {path}")
     
     def _open_terminal(self, path: Path):
         """Open terminal at path."""
@@ -374,7 +376,6 @@ class FileBrowser(ttk.Frame):
     
     def _load_bookmarks(self):
         """Load bookmarks from storage."""
-        # In real implementation, load from config file
         default_bookmarks = [
             Bookmark("Home", str(Path.home())),
             Bookmark(".config", str(Path.home() / ".config")),
@@ -419,7 +420,6 @@ class FileBrowser(ttk.Frame):
     
     def set_status(self, message: str):
         """Update status."""
-        # Could integrate with main window status bar
         pass
     
     def start_watching(self, path: str):
@@ -427,10 +427,10 @@ class FileBrowser(ttk.Frame):
         if not WATCHDOG_AVAILABLE:
             return
         
-        if self.observer is None:
+        if self.observer is None and Observer is not None:
             self.observer = Observer()
         
-        if path not in self.watched_paths:
+        if self.observer and path not in self.watched_paths:
             handler = ConfigFileHandler(self._on_file_changed)
             self.observer.schedule(handler, path, recursive=False)
             self.watched_paths.add(path)
