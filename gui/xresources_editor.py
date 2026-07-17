@@ -247,16 +247,27 @@ Remember: Save → Apply → New XTerm to see changes!"""
     
     def _on_double_click(self, event):
         """Handle double click for editing."""
-        selection = self.tree.selection()
-        if not selection:
+        # Get the item under cursor
+        item = self.tree.identify('row', event.x, event.y)
+        if not item:
             return
         
-        item = selection[0]
+        # Select the item
+        self.tree.selection_set(item)
+        self.tree.focus(item)
+        
+        # Get values
         values = self.tree.item(item, 'values')
-        if not values:
+        if not values or len(values) < 2:
             return
         
-        resource_path, current_value, value_type, _ = values
+        try:
+            resource_path = values[0]
+            current_value = values[1] if len(values) > 1 else ''
+            value_type = values[2] if len(values) > 2 else 'string'
+        except (IndexError, TypeError):
+            return
+        
         detected_type = self._detect_resource_type(resource_path)
         
         if detected_type == 'color' or value_type == 'color':
@@ -785,7 +796,7 @@ Remember: Save → Apply → New XTerm to see changes!"""
                     no_matches.pack(side=tk.LEFT, padx=5)
                 else:
                     no_matches.pack_forget()
-                    path_combo.event_generate('<Down>')
+                    # Removed auto-open dropdown to prevent blinking
             else:
                 path_combo['values'] = all_paths
                 no_matches.pack_forget()
@@ -828,17 +839,12 @@ Remember: Save → Apply → New XTerm to see changes!"""
                 else:
                     value_combo['values'] = filtered
                     value_no_matches.pack_forget()
-                    value_combo.event_generate('<Down>')
+                    # Removed auto-open dropdown to prevent blinking
             elif value_original and not text:
                 value_combo['values'] = value_original
                 value_no_matches.pack_forget()
         
         def on_value_keyrelease(event):
-            if event.keysym in ('Return', 'KP_Enter'):
-                if value_combo['values']:
-                    value_var.set(value_combo['values'][0])
-                    value_combo.event_generate('<Escape>')
-                return
             if event.char and event.char.isprintable():
                 dialog.after(10, filter_values)
         
@@ -954,11 +960,12 @@ Remember: Save → Apply → New XTerm to see changes!"""
         dialog.destroy()
     
     def _update_entry(self, resource_path: str, new_value: str):
-        """Update entry value."""
+        """Update entry value - uses parser's update_value method."""
         for entry in self.entries:
             if entry.resource_path == resource_path:
                 entry.value = new_value
-                self.parser.update_entry(resource_path, new_value)
+                # Use update_value instead of update_entry
+                self.parser.update_value(resource_path, new_value)
                 break
     
     def _delete_selected(self):
@@ -1155,277 +1162,6 @@ Remember: Save → Apply → New XTerm to see changes!"""
             return False, "Duplicate resource paths found"
         
         return True, ""
-        value_var = tk.StringVar()
-        value_combo = ttk.Combobox(value_input_frame, textvariable=value_var, width=40)
-        value_combo.pack(side=tk.LEFT, fill=tk.X, expand=True)
-        
-        # Color picker button (initially hidden)
-        color_picker_btn = ttk.Button(value_input_frame, text="🎨 Pick...", width=10)
-        color_picker_btn.pack(side=tk.RIGHT, padx=5)
-        color_picker_btn.pack_forget()  # Hide initially
-        
-        # Store original values for filtering (using list in enclosing scope)
-        value_original_values = []
-        
-        # No matches label for value (initially hidden)
-        value_no_matches = ttk.Label(value_frame, text="⚠️ No matches found", foreground="red")
-        
-        def filter_values(*args):
-            """Filter value dropdown based on user input in real-time."""
-            filter_text = value_var.get().lower()
-            
-            # Only filter if we have original values stored and user is typing
-            if value_original_values and filter_text:
-                filtered = [v for v in value_original_values if filter_text in v.lower()]
-                # Allow custom entry by including current text if no matches
-                if not filtered:
-                    value_combo['values'] = [filter_text]
-                else:
-                    value_combo['values'] = filtered
-                
-                # Show/hide "no matches" message
-                if not filtered and filter_text:
-                    value_no_matches.pack(anchor=tk.W, pady=2)
-                else:
-                    value_no_matches.pack_forget()
-                
-                # Open dropdown to show filtered results
-                if filtered:
-                    value_combo.event_generate('<Down>')
-            elif value_original_values and not filter_text:
-                # Restore original values when empty
-                value_combo['values'] = value_original_values
-                value_no_matches.pack_forget()
-        
-        # Bind to value changes for real-time filtering
-        def on_value_keyrelease(event):
-            """Handle key release for value dropdown navigation."""
-            if event.keysym in ('Return', 'KP_Enter'):
-                # Select first match on Enter
-                if value_combo['values']:
-                    value_var.set(value_combo['values'][0])
-                    value_combo.event_generate('<Escape>')
-                return
-            
-            # Trigger filtering on printable characters
-            if event.char and event.char.isprintable():
-                dialog.after(10, filter_values)
-        
-        value_combo.bind('<KeyRelease>', on_value_keyrelease)
-        
-        # Color preview frame
-        preview_frame = ttk.Frame(value_frame)
-        preview_frame.pack(fill=tk.X, pady=5)
-        
-        color_preview_label = ttk.Label(preview_frame, text="Color Preview:")
-        color_preview_label.pack(side=tk.LEFT)
-        
-        color_preview = tk.Label(preview_frame, text="   ", bg='#808080', relief=tk.RIDGE, bd=2, width=4, height=2)
-        color_preview.pack(side=tk.LEFT, padx=5)
-        color_preview.pack_forget()  # Hide initially
-        
-        # Format indicator
-        format_label = ttk.Label(value_frame, text="", foreground="gray", font=('Helvetica', 9))
-        format_label.pack(anchor=tk.W)
-        
-        def update_value_suggestions(*args):
-            """Update value dropdown based on selected resource path."""
-            nonlocal value_original_values
-            
-            path_raw = path_var.get()
-            path = strip_icon(path_raw)
-            if not path or path.startswith('──') or path == '⭐ Most Common':
-                value_combo['values'] = []
-                value_original_values = []
-                value_var.set('')
-                color_picker_btn.pack_forget()
-                color_preview.pack_forget()
-                color_preview_label.pack_forget()
-                format_label.config(text="")
-                value_no_matches.pack_forget()
-                return
-            
-            res_type = self._detect_resource_type(path)
-            
-            # Get presets for this specific path if available
-            from config.presets import get_presets_for_resource
-            presets = get_presets_for_resource(path)
-            
-            values = []
-            if presets and 'values' in presets:
-                # Use specific presets for this resource
-                values = [str(v) for v in presets['values']][:50]  # Limit to first 50
-            elif res_type == 'color':
-                # Show color suggestions
-                from config.presets import XTERM_COLORS
-                values = [f"{name}: {hex_val}" for name, hex_val in XTERM_COLORS.items()]
-                # Show color picker and preview
-                color_picker_btn.pack(side=tk.RIGHT, padx=5)
-                color_preview_label.pack(side=tk.LEFT)
-                color_preview.pack(side=tk.LEFT, padx=5)
-                format_label.config(text="Formats: #ffffff or rgb:ff/ff/ff")
-            elif res_type == 'font':
-                from config.presets import COMMON_FONTS
-                values = COMMON_FONTS
-                format_label.config(text="Enter font name or select from list")
-            elif res_type == 'boolean':
-                from config.presets import ALL_BOOLEAN_VALUES
-                values = ALL_BOOLEAN_VALUES
-                format_label.config(text="true/false, yes/no, on/off, 1/0")
-            
-            # Store original values and set dropdown
-            value_original_values = values[:]
-            value_combo['values'] = values
-            value_var.set('')  # Clear value when path changes
-            
-            # Hide color UI for non-color types
-            if res_type != 'color':
-                color_picker_btn.pack_forget()
-                color_preview.pack_forget()
-                color_preview_label.pack_forget()
-                if res_type not in ['font', 'boolean']:
-                    format_label.config(text="")
-        
-        def on_value_changed(*args):
-            """Update color preview when value changes."""
-            value = value_var.get()
-            # Try to extract hex color from value
-            hex_match = re.search(r'#[0-9a-fA-F]{6}', value)
-            if hex_match:
-                color_preview.config(bg=hex_match.group())
-                color_preview.pack(side=tk.LEFT, padx=5)
-            elif self.COLOR_RGB_PATTERN.match(value):
-                # Convert rgb:ff/ff/ff to #ffffff
-                match = self.COLOR_RGB_PATTERN.match(value)
-                if match:
-                    r, g, b = match.groups()
-                    hex_color = f"#{r[:2]}{g[:2]}{b[:2]}"
-                    color_preview.config(bg=hex_color)
-                    color_preview.pack(side=tk.LEFT, padx=5)
-            elif value in ['true', 'True', 'TRUE', 'on', 'On', 'ON', 'yes', 'Yes', 'YES', '1']:
-                color_preview.config(bg='#00ff00')  # Green for true
-                color_preview.pack(side=tk.LEFT, padx=5)
-            elif value in ['false', 'False', 'FALSE', 'off', 'Off', 'OFF', 'no', 'No', 'NO', '0']:
-                color_preview.config(bg='#ff0000')  # Red for false
-                color_preview.pack(side=tk.LEFT, padx=5)
-        
-        path_var.trace('w', update_value_suggestions)
-        value_var.trace('w', on_value_changed)
-        
-        # Color picker functionality
-        def pick_color():
-            """Open color picker dialog."""
-            current = value_var.get()
-            initial = '#808080'  # Default gray
-            
-            # Try to parse current value
-            hex_match = re.search(r'#[0-9a-fA-F]{6}', current)
-            if hex_match:
-                initial = hex_match.group()
-            elif self.COLOR_RGB_PATTERN.match(current):
-                match = self.COLOR_RGB_PATTERN.match(current)
-                if match:
-                    r, g, b = match.groups()
-                    initial = f"#{r[:2]}{g[:2]}{b[:2]}"
-            
-            color = colorchooser.askcolor(initialcolor=initial, title="Choose Color")
-            if color and color[1]:
-                value_var.set(color[1])
-                color_preview.config(bg=color[1])
-        
-        color_picker_btn.config(command=pick_color)
-        
-        # Bind combobox selection to prevent selecting separator lines
-        def on_path_select(event):
-            selected = path_combo.get()
-            if selected.startswith('──') or selected == '⭐ Most Common':
-                path_combo.set('')
-                return 'break'
-            # Auto-strip icon if user selected from dropdown
-            clean_path = strip_icon(selected)
-            if clean_path and clean_path != selected:
-                path_var.set(clean_path)
-        
-        path_combo.bind('<<ComboboxSelected>>', on_path_select)
-        
-        # Buttons
-        btn_frame = ttk.Frame(dialog)
-        btn_frame.pack(pady=15)
-        
-        # Track if already processed
-        self._add_processed = False
-        
-        def on_ok():
-            # Prevent double execution
-            if self._add_processed:
-                return
-            self._add_processed = True
-            
-            path_raw = path_var.get().strip()
-            path = strip_icon(path_raw)
-            value = value_var.get().strip()
-            
-            # Validate path is not a separator
-            if not path or path.startswith('──') or path == '⭐ Most Common':
-                messagebox.showerror("Error", "Please select a valid resource path")
-                self._add_processed = False
-                return
-            
-            if not value:
-                messagebox.showerror("Error", "Value is required")
-                self._add_processed = False
-                return
-            
-            # Check for duplicate
-            if any(e.resource_path == path for e in self.entries):
-                messagebox.showerror("Error", f"Resource '{path}' already exists")
-                self._add_processed = False
-                return
-            
-            # Extract actual value if it has a color name prefix (e.g., "white: #ffffff")
-            hex_match = re.search(r'#[0-9a-fA-F]{6}$', value)
-            if hex_match:
-                value = hex_match.group()
-            
-            entry = self.parser.add_entry(path, value)
-            self.entries.append(entry)
-            self.filtered_entries = self.entries[:]
-            self.mark_dirty(True)
-            self._populate_tree()
-            self.set_status(f"Added {path}")
-            
-            self._close_dialog(dialog)
-        
-        def on_cancel():
-            self._close_dialog(dialog)
-        
-        ttk.Button(btn_frame, text="OK", command=on_ok).pack(side=tk.LEFT, padx=5)
-        ttk.Button(btn_frame, text="Cancel", command=on_cancel).pack(side=tk.LEFT, padx=5)
-        
-        # Center dialog
-        dialog.update_idletasks()
-        x = self.winfo_rootx() + (self.winfo_width() - dialog.winfo_width()) // 2
-        y = self.winfo_rooty() + (self.winfo_height() - dialog.winfo_height()) // 2
-        dialog.geometry(f"+{x}+{y}")
-        
-        # Set focus to path combobox
-        path_combo.focus_set()
-    def _delete_selected(self):
-        """Delete selected resource."""
-        # Prevent concurrent delete operations
-        if self._delete_in_progress:
-            return
-        self._delete_in_progress = True
-        
-        try:
-            selection = self.tree.selection()
-            if not selection:
-                messagebox.showwarning("No Selection", "Please select a resource to delete")
-                return
-            
-            item = selection[0]
-            values = self.tree.item(item, 'values')
-            resource_path = values[0]
             
             if messagebox.askyesno("Confirm Delete", f"Delete {resource_path}?"):
                 # Remove from parser

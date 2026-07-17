@@ -2,12 +2,35 @@
 
 All notable changes to KosXER will be documented in this file.
 
+## [Unreleased] - 2026-01-16
+
+### Fixed
+- **UI Bug**: Fixed dropdown blinking when searching in Add Resource dialog
+  - Removed auto-open dropdown on every keystroke
+  - Dropdown now only opens with Alt+Down or manual click
+  - Filter still updates values without forcing dropdown open
+- **UI Bug**: Fixed double-click on tree item opening empty window
+  - Changed to use identify() to get actual item under cursor
+  - Added proper item selection before processing
+  - Improved validation of tree item values
+- **Data Bug**: Fixed save/update not persisting changes
+  - Changed _update_entry() to use parser.update_value() method
+  - Fixed method name mismatch causing updates to fail
+
+## [1.1.0] - 2025-01-15
+  - Filter still updates values without forcing dropdown open
+- **UI Bug**: Fixed double-click on tree item opening empty window
+  - Changed to use identify() to get actual item under cursor
+  - Added proper item selection before processing
+  - Improved validation of tree item values
+- **Data Bug**: Fixed save/update not persisting changes
+  - Changed _update_entry() to use parser.update_value() method
+  - Fixed method name mismatch causing updates to fail
+
 ## [1.1.0] - 2025-01-15
 
 ### Fixed
 - **Critical Bug**: Fixed duplicate add/delete operations in KV Editor and XResources Editor
-  - Added dialog protection flags to prevent multiple simultaneous dialogs
-  - Added operation-in-progress flags to prevent duplicate executions
   - Fixed race conditions in add/delete handlers
 - **Critical Bug**: Fixed save functionality not working properly
   - Added backup creation before save operations

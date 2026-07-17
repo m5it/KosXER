@@ -2686,3 +2686,221 @@ Usage:
 [16:28:15] You: 
 [16:38:38] You: 
 [16:38:47] You: 
+[17:16:43] INFO: Session started, sess_id=332, mode=build, model=kimi-k2.5:cloud
+[17:16:43] You: 
+[17:16:45] You: 
+[17:18:08] [Context: 39790/262144 (15.2%)]
+[17:18:08] [iter 1] [Context: 39790/262144 (15.2%)]
+[17:18:08] INFO: AI request (iteration 1, msgs=74)
+[17:18:11] INFO: AI response: 35342 prompt + 142 response tokens (total: 1589483 / 18814)
+[17:18:11] [after +142] [Context: 39876/262144 (15.2%)]
+[17:18:11] [iter 2] [Context: 39876/262144 (15.2%)]
+[17:18:11] INFO: AI request (iteration 2, msgs=76)
+[17:18:14] INFO: AI response: 35427 prompt + 46 response tokens (total: 1624910 / 18860)
+[17:18:14] [after +46] [Context: 42471/262144 (16.2%)]
+[17:18:14] [iter 3] [Context: 42471/262144 (16.2%)]
+[17:18:14] INFO: AI request (iteration 3, msgs=78)
+[17:18:15] INFO: AI response: 37861 prompt + 45 response tokens (total: 1662771 / 18905)
+[17:18:15] [after +45] [Context: 45229/262144 (17.3%)]
+[17:18:15] [iter 4] [Context: 45229/262144 (17.3%)]
+[17:18:15] INFO: AI request (iteration 4, msgs=80)
+[17:18:21] INFO: AI response: 40424 prompt + 255 response tokens (total: 1703195 / 19160)
+[17:18:21] [after +255] [Context: 45385/262144 (17.3%)]
+[17:18:21] [iter 5] [Context: 45385/262144 (17.3%)]
+[17:18:21] INFO: AI request (iteration 5, msgs=82)
+[17:18:24] INFO: AI response: 40579 prompt + 180 response tokens (total: 1743774 / 19340)
+[17:18:24] [after +180] [Context: 45471/262144 (17.3%)]
+[17:18:24] [iter 6] [Context: 45471/262144 (17.3%)]
+[17:18:24] INFO: AI request (iteration 6, msgs=84)
+[17:18:27] INFO: AI response: 40657 prompt + 69 response tokens (total: 1784431 / 19409)
+[17:18:27] [after +69] [Context: 54017/262144 (20.6%)]
+[17:18:27] [iter 7] [Context: 54017/262144 (20.6%)]
+[17:18:27] INFO: AI request (iteration 7, msgs=86)
+[17:18:32] INFO: AI response: 48566 prompt + 331 response tokens (total: 1832997 / 19740)
+[17:18:32] [after +331] [Context: 54392/262144 (20.7%)]
+[17:18:32] [iter 8] [Context: 54392/262144 (20.7%)]
+[17:18:32] INFO: AI request (iteration 8, msgs=88)
+[17:18:44] INFO: AI response: 48912 prompt + 205 response tokens (total: 1881909 / 19945)
+[17:18:44] [after +205] [Context: 54710/262144 (20.9%)]
+[17:18:44] [iter 9] [Context: 54710/262144 (20.9%)]
+[17:18:44] INFO: AI request (iteration 9, msgs=90)
+[17:18:50] INFO: AI response: 49184 prompt + 500 response tokens (total: 1931093 / 20445)
+[17:18:50] [after +500] [Context: 55301/262144 (21.1%)]
+[17:18:50] [iter 10] [Context: 55301/262144 (21.1%)]
+[17:18:50] INFO: AI request (iteration 10, msgs=92)
+[17:18:52] INFO: AI response: 49728 prompt + 81 response tokens (total: 1980821 / 20526)
+[17:18:52] [after +81] [Context: 55385/262144 (21.1%)]
+[17:18:52] You: 
+[17:19:05] [Context: 55403/262144 (21.1%)]
+[17:19:05] [iter 1] [Context: 55403/262144 (21.1%)]
+[17:19:05] INFO: AI request (iteration 1, msgs=95)
+[17:19:08] INFO: AI response: 49826 prompt + 52 response tokens (total: 2030647 / 20578)
+[17:19:08] [after +52] [Context: 65745/262144 (25.1%)]
+[17:19:08] [iter 2] [Context: 65745/262144 (25.1%)]
+[17:19:08] INFO: AI request (iteration 2, msgs=97)
+[17:19:11] INFO: AI response: 59304 prompt + 70 response tokens (total: 2089951 / 20648)
+[17:19:11] [after +70] [Context: 65819/262144 (25.1%)]
+[17:19:11] [iter 3] [Context: 65819/262144 (25.1%)]
+[17:19:11] INFO: AI request (iteration 3, msgs=99)
+[17:19:15] INFO: AI response: 59375 prompt + 79 response tokens (total: 2149326 / 20727)
+[17:19:15] [after +79] [Context: 66114/262144 (25.2%)]
+[17:19:15] [iter 4] [Context: 66114/262144 (25.2%)]
+[17:19:15] INFO: AI request (iteration 4, msgs=101)
+[17:19:18] INFO: AI response: 59700 prompt + 182 response tokens (total: 2209026 / 20909)
+[17:19:18] [after +182] [Context: 66375/262144 (25.3%)]
+[17:19:18] [iter 5] [Context: 66375/262144 (25.3%)]
+[17:19:18] INFO: AI request (iteration 5, msgs=103)
+[17:19:20] INFO: AI response: 59939 prompt + 76 response tokens (total: 2268965 / 20985)
+[17:19:20] [after +76] [Context: 75521/262144 (28.8%)]
+[17:19:20] [iter 6] [Context: 75521/262144 (28.8%)]
+[17:19:20] INFO: AI request (iteration 6, msgs=105)
+[17:19:30] INFO: AI response: 68413 prompt + 1381 response tokens (total: 2337378 / 22366)
+[17:19:30] [after +1381] [Context: 77213/262144 (29.5%)]
+[17:19:30] [iter 7] [Context: 77213/262144 (29.5%)]
+[17:19:30] INFO: AI request (iteration 7, msgs=107)
+[17:19:34] INFO: AI response: 69868 prompt + 436 response tokens (total: 2407246 / 22802)
+[17:19:34] [after +436] [Context: 77754/262144 (29.7%)]
+[17:19:34] [iter 8] [Context: 77754/262144 (29.7%)]
+[17:19:34] INFO: AI request (iteration 8, msgs=109)
+[17:19:36] INFO: AI response: 70376 prompt + 61 response tokens (total: 2477622 / 22863)
+[17:19:36] [after +61] [Context: 77823/262144 (29.7%)]
+[17:19:36] [iter 9] [Context: 77823/262144 (29.7%)]
+[17:19:36] INFO: AI request (iteration 9, msgs=111)
+[17:19:39] INFO: AI response: 70446 prompt + 60 response tokens (total: 2548068 / 22923)
+[17:19:39] [after +60] [Context: 77875/262144 (29.7%)]
+[17:19:39] [iter 10] [Context: 77875/262144 (29.7%)]
+[17:19:39] INFO: AI request (iteration 10, msgs=113)
+[17:19:41] INFO: AI response: 70503 prompt + 50 response tokens (total: 2618571 / 22973)
+[17:19:41] [after +50] [Context: 78091/262144 (29.8%)]
+[17:19:41] You: 
+[17:19:49] [Context: 78162/262144 (29.8%)]
+[17:19:49] [iter 1] [Context: 78162/262144 (29.8%)]
+[17:19:49] INFO: AI request (iteration 1, msgs=117)
+[17:19:52] INFO: AI response: 70752 prompt + 83 response tokens (total: 2689323 / 23056)
+[17:19:52] [after +83] [Context: 78258/262144 (29.9%)]
+[17:19:52] [iter 2] [Context: 78258/262144 (29.9%)]
+[17:19:52] INFO: AI request (iteration 2, msgs=119)
+[17:19:54] INFO: AI response: 70845 prompt + 76 response tokens (total: 2760168 / 23132)
+[17:19:54] [after +76] [Context: 91163/262144 (34.8%)]
+[17:19:54] [iter 3] [Context: 91163/262144 (34.8%)]
+[17:19:54] INFO: AI request (iteration 3, msgs=121)
+[17:20:16] INFO: AI response: 82508 prompt + 2639 response tokens (total: 2842676 / 25771)
+[17:20:16] [after +2639] [Context: 94193/262144 (35.9%)]
+[17:20:16] [iter 4] [Context: 94193/262144 (35.9%)]
+[17:20:16] INFO: AI request (iteration 4, msgs=123)
+[17:20:19] INFO: AI response: 85215 prompt + 63 response tokens (total: 2927891 / 25834)
+[17:20:19] [after +63] [Context: 94719/262144 (36.1%)]
+[17:20:19] [iter 5] [Context: 94719/262144 (36.1%)]
+[17:20:19] INFO: AI request (iteration 5, msgs=125)
+[17:20:21] INFO: AI response: 85664 prompt + 84 response tokens (total: 3013555 / 25918)
+[17:20:21] [after +84] [Context: 94789/262144 (36.2%)]
+[17:20:21] [iter 6] [Context: 94789/262144 (36.2%)]
+[17:20:21] INFO: AI request (iteration 6, msgs=127)
+[17:20:24] INFO: AI response: 85734 prompt + 54 response tokens (total: 3099289 / 25972)
+[17:20:24] [after +54] [Context: 94853/262144 (36.2%)]
+[17:20:24] You: 
+[17:20:40] [Context: 94863/262144 (36.2%)]
+[17:20:40] [iter 1] [Context: 94863/262144 (36.2%)]
+[17:20:40] INFO: AI request (iteration 1, msgs=129)
+[17:20:43] INFO: AI response: 85746 prompt + 86 response tokens (total: 3185035 / 26058)
+[17:20:43] [after +86] [Context: 94964/262144 (36.2%)]
+[17:20:43] [iter 2] [Context: 94964/262144 (36.2%)]
+[17:20:43] INFO: AI request (iteration 2, msgs=131)
+[17:20:45] INFO: AI response: 85842 prompt + 47 response tokens (total: 3270877 / 26105)
+[17:20:45] [after +47] [Context: 108545/262144 (41.4%)]
+[17:20:45] [iter 3] [Context: 108545/262144 (41.4%)]
+[17:20:45] INFO: AI request (iteration 3, msgs=133)
+[17:20:49] INFO: AI response: 98152 prompt + 98 response tokens (total: 3369029 / 26203)
+[17:20:49] [after +98] [Context: 108631/262144 (41.4%)]
+[17:20:49] [iter 4] [Context: 108631/262144 (41.4%)]
+[17:20:49] INFO: AI request (iteration 4, msgs=135)
+[17:21:31] INFO: AI response: 98238 prompt + 5343 response tokens (total: 3467267 / 31546)
+[17:21:31] [after +5343] [Context: 114634/262144 (43.7%)]
+[17:21:31] [iter 5] [Context: 114634/262144 (43.7%)]
+[17:21:31] INFO: AI request (iteration 5, msgs=137)
+[17:21:35] INFO: AI response: 103588 prompt + 62 response tokens (total: 3570855 / 31608)
+[17:21:35] [after +62] [Context: 114694/262144 (43.8%)]
+[17:21:35] [iter 6] [Context: 114694/262144 (43.8%)]
+[17:21:35] INFO: AI request (iteration 6, msgs=139)
+[17:21:38] INFO: AI response: 103646 prompt + 79 response tokens (total: 3674501 / 31687)
+[17:21:38] [after +79] [Context: 114769/262144 (43.8%)]
+[17:21:38] [iter 7] [Context: 114769/262144 (43.8%)]
+[17:21:38] INFO: AI request (iteration 7, msgs=141)
+[17:21:48] INFO: AI response: 103725 prompt + 86 response tokens (total: 3778226 / 31773)
+[17:21:48] [after +86] [Context: 125555/262144 (47.9%)]
+[17:21:48] [iter 8] [Context: 125555/262144 (47.9%)]
+[17:21:48] INFO: AI request (iteration 8, msgs=143)
+[17:23:28] INFO: AI response: 113587 prompt + 11386 response tokens (total: 3891813 / 43159)
+[17:23:28] [after +11386] [Context: 138183/262144 (52.7%)]
+[17:23:28] [iter 9] [Context: 138183/262144 (52.7%)]
+[17:23:28] INFO: AI request (iteration 9, msgs=145)
+[17:23:32] INFO: AI response: 125036 prompt + 152 response tokens (total: 4016849 / 43311)
+[17:23:32] [after +152] [Context: 138263/262144 (52.7%)]
+[17:23:32] [iter 10] [Context: 138263/262144 (52.7%)]
+[17:23:32] INFO: AI request (iteration 10, msgs=147)
+[17:23:39] INFO: AI response: 125118 prompt + 382 response tokens (total: 4141967 / 43693)
+[17:23:39] [after +382] [Context: 138601/262144 (52.9%)]
+[17:23:39] You: 
+[17:25:57] [Context: 138619/262144 (52.9%)]
+[17:25:57] [iter 1] [Context: 138619/262144 (52.9%)]
+[17:25:57] INFO: AI request (iteration 1, msgs=150)
+[17:26:05] INFO: AI response: 125424 prompt + 61 response tokens (total: 4267391 / 43754)
+[17:26:05] [after +61] [Context: 138675/262144 (52.9%)]
+[17:26:05] [iter 2] [Context: 138675/262144 (52.9%)]
+[17:26:05] INFO: AI request (iteration 2, msgs=152)
+[17:26:23] INFO: AI response: 125479 prompt + 35 response tokens (total: 4392870 / 43789)
+[17:26:23] [after +35] [Context: 139246/262144 (53.1%)]
+[17:26:23] [iter 3] [Context: 139246/262144 (53.1%)]
+[17:26:23] INFO: AI request (iteration 3, msgs=154)
+[17:26:27] INFO: AI response: 126093 prompt + 44 response tokens (total: 4518963 / 43833)
+[17:26:27] [after +44] [Context: 139770/262144 (53.3%)]
+[17:26:27] [iter 4] [Context: 139770/262144 (53.3%)]
+[17:26:27] INFO: AI request (iteration 4, msgs=156)
+[17:26:34] INFO: AI response: 126566 prompt + 298 response tokens (total: 4645529 / 44131)
+[17:26:34] [after +298] [Context: 140121/262144 (53.5%)]
+[17:26:34] [iter 5] [Context: 140182/262144 (53.5%)]
+[17:26:34] INFO: AI request (iteration 5, msgs=159)
+[17:26:37] INFO: AI response: 126979 prompt + 113 response tokens (total: 4772508 / 44244)
+[17:26:37] [after +113] [Context: 140215/262144 (53.5%)]
+[17:26:37] [iter 6] [Context: 140215/262144 (53.5%)]
+[17:26:37] INFO: AI request (iteration 6, msgs=161)
+[17:26:41] INFO: AI response: 127008 prompt + 109 response tokens (total: 4899516 / 44353)
+[17:26:41] [after +109] [Context: 140351/262144 (53.5%)]
+[17:26:41] You: 
+[17:27:21] [Context: 140381/262144 (53.6%)]
+[17:27:21] [iter 1] [Context: 140381/262144 (53.6%)]
+[17:27:21] INFO: AI request (iteration 1, msgs=163)
+[17:27:24] INFO: AI response: 127131 prompt + 45 response tokens (total: 5026647 / 44398)
+[17:27:24] [after +45] [Context: 140730/262144 (53.7%)]
+[17:27:24] [iter 2] [Context: 140730/262144 (53.7%)]
+[17:27:24] INFO: AI request (iteration 2, msgs=165)
+[17:27:29] INFO: AI response: 127453 prompt + 140 response tokens (total: 5154100 / 44538)
+[17:27:29] [after +140] [Context: 140899/262144 (53.7%)]
+[17:27:29] You: 
+[17:29:15] [Context: 140926/262144 (53.8%)]
+[17:29:15] [iter 1] [Context: 140926/262144 (53.8%)]
+[17:29:15] INFO: AI request (iteration 1, msgs=167)
+[17:29:19] INFO: AI response: 127587 prompt + 157 response tokens (total: 5281687 / 44695)
+[17:29:19] ✓ GetTip: Error: Missing required parameter(s): title
+Usage:
+<GetTip>
+<title>string</title>
+</GetTip>
+[17:29:19] [after +157] [Context: 140988/262144 (53.8%)]
+[17:29:19] [iter 2] [Context: 140988/262144 (53.8%)]
+[17:29:19] INFO: AI request (iteration 2, msgs=169)
+[17:29:24] INFO: AI response: 127650 prompt + 177 response tokens (total: 5409337 / 44872)
+[17:29:24] [after +177] [Context: 141087/262144 (53.8%)]
+[17:29:24] [iter 3] [Context: 141087/262144 (53.8%)]
+[17:29:24] INFO: AI request (iteration 3, msgs=171)
+[17:29:27] INFO: AI response: 127765 prompt + 71 response tokens (total: 5537102 / 44943)
+[17:29:27] [after +71] [Context: 141137/262144 (53.8%)]
+[17:29:27] [iter 4] [Context: 141137/262144 (53.8%)]
+[17:29:27] INFO: AI request (iteration 4, msgs=173)
+[17:29:31] INFO: AI response: 127834 prompt + 249 response tokens (total: 5664936 / 45192)
+[17:29:31] [after +249] [Context: 141462/262144 (54.0%)]
+[17:29:31] [iter 5] [Context: 141462/262144 (54.0%)]
+[17:29:31] INFO: AI request (iteration 5, msgs=175)
+[17:29:34] INFO: AI response: 128171 prompt + 64 response tokens (total: 5793107 / 45256)
+[17:29:34] [after +64] [Context: 141531/262144 (54.0%)]
+[17:29:34] You: 
