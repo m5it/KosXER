@@ -16,6 +16,7 @@ from parsers.generic_kv_parser import GenericKVParser, KVEntry
 
 logger = logging.getLogger('kosxer.kv_editor')
 
+
 class KVEditor(EditorWidget):
     """
     Editor widget for key-value configuration files.
@@ -122,6 +123,14 @@ class KVEditor(EditorWidget):
                 e for e in self.entries 
                 if filter_text in e.key.lower() or filter_text in e.value.lower()
             ]
+        
+        self._populate_tree()
+        self.set_status(f"Showing {len(self.filtered_entries)} of {len(self.entries)} entries")
+    
+    def _clear_filter(self):
+        """Clear filter."""
+        self.filter_var.set('')
+        self.filtered_entries = self.entries[:]
         self._populate_tree()
     
     def _on_double_click(self, event):
@@ -129,6 +138,11 @@ class KVEditor(EditorWidget):
         self._edit_selected()
     
     def _add_row(self):
+        """Add new key-value row."""
+        # Prevent duplicate dialogs
+        if self._dialog_open:
+            logger.debug("Add dialog already open, ignoring")
+            return
         self._dialog_open = True
         logger.info("Opening Add Entry dialog")
         
@@ -188,6 +202,19 @@ class KVEditor(EditorWidget):
         btn_frame = ttk.Frame(dialog)
         btn_frame.pack(pady=10)
         ttk.Button(btn_frame, text="OK", command=on_ok).pack(side=tk.LEFT, padx=5)
+        ttk.Button(btn_frame, text="Cancel", command=lambda: self._close_dialog(dialog)).pack(side=tk.LEFT, padx=5)
+        
+        # Center dialog
+        dialog.update_idletasks()
+        x = self.winfo_rootx() + (self.winfo_width() - dialog.winfo_width()) // 2
+        y = self.winfo_rooty() + (self.winfo_height() - dialog.winfo_height()) // 2
+        dialog.geometry(f"+{x}+{y}")
+    
+    def _close_dialog(self, dialog):
+        """Close dialog and reset flag."""
+        self._dialog_open = False
+        dialog.destroy()
+    
     def _delete_selected(self):
         """Delete selected row(s)."""
         # Prevent concurrent delete operations
@@ -221,86 +248,6 @@ class KVEditor(EditorWidget):
                     self.mark_dirty(True)
                     self._populate_tree()
                     logger.info(f"Deleted {deleted_count} entries: {', '.join(deleted_keys)}")
-                    self.set_status(f"Deleted {deleted_count} row(s)")
-        finally:
-            self._delete_in_progress = False
-        
-        # Track if already processed to prevent double-add
-        self._add_processed = False
-        
-        def on_ok():
-            # Prevent double execution
-            if self._add_processed:
-                return
-            self._add_processed = True
-            
-            key = key_var.get().strip()
-            value = value_var.get().strip()
-            
-            if not key:
-                messagebox.showerror("Error", "Key is required")
-                self._add_processed = False
-                return
-            
-            # Check for duplicate
-            if any(e.key == key for e in self.entries):
-                messagebox.showerror("Error", f"Key '{key}' already exists")
-                self._add_processed = False
-                return
-            
-            entry = KVEntry(key=key, value=value, is_export=export_var.get())
-            self.entries.append(entry)
-            self.filtered_entries = self.entries[:]
-            self.mark_dirty(True)
-            self._populate_tree()
-            self.set_status(f"Added: {key}")
-            self._close_dialog(dialog)
-        
-        btn_frame = ttk.Frame(dialog)
-        btn_frame.pack(pady=10)
-        ttk.Button(btn_frame, text="OK", command=on_ok).pack(side=tk.LEFT, padx=5)
-        ttk.Button(btn_frame, text="Cancel", command=lambda: self._close_dialog(dialog)).pack(side=tk.LEFT, padx=5)
-        
-        # Center dialog
-        dialog.update_idletasks()
-        x = self.winfo_rootx() + (self.winfo_width() - dialog.winfo_width()) // 2
-        y = self.winfo_rooty() + (self.winfo_height() - dialog.winfo_height()) // 2
-        dialog.geometry(f"+{x}+{y}")
-    
-    def _close_dialog(self, dialog):
-        """Close dialog and reset flag."""
-        self._dialog_open = False
-        dialog.destroy()
-    
-    def _delete_selected(self):
-        """Delete selected row(s)."""
-        # Prevent concurrent delete operations
-        if self._delete_in_progress:
-            return
-        self._delete_in_progress = True
-        
-        try:
-            selection = self.tree.selection()
-            if not selection:
-                messagebox.showwarning("No Selection", "Please select a row to delete")
-                return
-            
-            if messagebox.askyesno("Confirm", "Delete selected row(s)?"):
-                deleted_count = 0
-                for item_id in selection:
-                    values = self.tree.item(item_id, 'values')
-                    key = values[0]
-                    
-                    # Remove from entries - only delete if key exists
-                    original_len = len(self.entries)
-                    self.entries = [e for e in self.entries if e.key != key]
-                    if len(self.entries) < original_len:
-                        deleted_count += 1
-                
-                if deleted_count > 0:
-                    self.filtered_entries = self.entries[:]
-                    self.mark_dirty(True)
-                    self._populate_tree()
                     self.set_status(f"Deleted {deleted_count} row(s)")
         finally:
             self._delete_in_progress = False
