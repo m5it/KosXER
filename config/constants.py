@@ -1,9 +1,15 @@
 """Application constants for KosXER."""
 
 import os
+import sys
+from pathlib import Path
+
+# Import version from AUTOVERSION (single source of truth)
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from AUTOVERSION import VERSION
 
 APP_NAME = "KosXER"
-VERSION = "0.1.0"
+# VERSION imported from AUTOVERSION
 
 # Default configuration paths
 HOME_DIR = os.path.expanduser("~")
@@ -19,26 +25,28 @@ DEFAULT_CONFIG = {
         "auto_backup": True,
         "backup_count": 5,
         "show_line_numbers": True,
-        "theme": "default",
-        "font_family": "monospace",
-        "font_size": 10,
+        "theme": "dark"
     },
-    "files": {
-        "recent_files": [],
-        "max_recent": 10,
-        "auto_reload": True,
-    },
-    "parsers": {
-        "preserve_comments": True,
-        "strict_mode": False,
+    "file_browser": {
+        "show_hidden": False,
+        "follow_symlinks": True
     }
 }
 
-# File type associations
-FILE_TYPES = {
-    ".Xresources": "xresources",
-    ".Xdefaults": "xresources",
-    ".xrdb": "xresources",
-    "menu.xml": "openbox_menu",
-    "rc.xml": "keyvalue",
-}
+# Supported file types
+SUPPORTED_EXTENSIONS = [
+    '.Xresources',
+    '.Xdefaults', 
+    '.xml',
+    '.conf',
+    '.rc',
+    '.cfg',
+    '.env',
+    '.json'
+]
+
+# UI Constants
+WINDOW_MIN_WIDTH = 800
+WINDOW_MIN_HEIGHT = 600
+DEFAULT_WINDOW_WIDTH = 1400
+DEFAULT_WINDOW_HEIGHT = 900

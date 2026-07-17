@@ -13,10 +13,9 @@ from typing import Optional, Dict, Any
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 
-# Ensure we can import our modules
-sys.path.insert(0, str(Path(__file__).parent))
-
-from config.constants import APP_NAME, VERSION
+# Import version from AUTOVERSION (single source of truth)
+from AUTOVERSION import VERSION
+from config.constants import APP_NAME
 from config.settings import Settings
 
 from parsers import (
@@ -106,6 +105,12 @@ class KosXERApp:
         view_menu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="View", menu=view_menu)
         view_menu.add_command(label="Toggle File Browser", command=self._toggle_file_browser, accelerator="Ctrl+B")
+        view_menu.add_separator()
+        self.show_hidden_var = tk.BooleanVar(value=False)
+        view_menu.add_checkbutton(label="Show Hidden Files", variable=self.show_hidden_var, 
+                                  command=self._toggle_hidden_files, accelerator="Ctrl+H")
+        view_menu.add_separator()
+        view_menu.add_command(label="Refresh", command=self._refresh_browser, accelerator="F5")
         
         # Help menu
         help_menu = tk.Menu(menubar, tearoff=0)
@@ -173,6 +178,9 @@ Keyboard Shortcuts:
   Ctrl+O  Open file
   Ctrl+S  Save
   Ctrl+Q  Quit
+  Ctrl+B  Toggle file browser
+  Ctrl+H  Toggle hidden files
+  F5      Refresh
 """)
         text.config(state=tk.DISABLED)
     
@@ -203,7 +211,21 @@ Keyboard Shortcuts:
         self.root.bind("<Control-S>", lambda e: self._file_save_as())
         self.root.bind("<Control-w>", lambda e: self._close_current_tab())
         self.root.bind("<Control-b>", lambda e: self._toggle_file_browser())
+        self.root.bind("<Control-h>", lambda e: self._toggle_hidden_files())
+        self.root.bind("<F5>", lambda e: self._refresh_browser())
         self.root.bind("<Control-q>", lambda e: self._on_close())
+    
+    def _toggle_hidden_files(self):
+        """Toggle hidden files display."""
+        current = self.show_hidden_var.get()
+        self.show_hidden_var.set(not current)
+        if hasattr(self, 'file_browser'):
+            self.file_browser.set_show_hidden(self.show_hidden_var.get())
+    
+    def _refresh_browser(self):
+        """Refresh file browser."""
+        if hasattr(self, 'file_browser'):
+            self.file_browser.refresh()
     
     def _open_file(self, filepath: str):
         """Open a file."""
