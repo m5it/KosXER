@@ -1,42 +1,29 @@
-# Plan: Add KosDWM Support to KosXER
-## ID: 1784214754.9100733
-## Created: 2026-07-16 15:12:34
-## Status: completed
+# Plan: XResources Known Values Presets Feature
+## ID: 1784278849.1303277
+## Created: 2026-07-17 09:00:49
+## Status: in_progress
 
 ### Goal:
-KosDWM is a dynamic window manager with:
-- JSON config at ~/.config/KosDWM/config.json (colors, bar_height, layout_mode)
-- Auto-generated menus from folder structure at ~/.config/KosDWM/Menus/
-- Menu items are Python scripts that define menu entries
-- UI theming with active/inactive button colors
+Add a presets system for commonly used XResources values including colors, fonts, and booleans. Include XTerm restart helper since xterm needs restart to see changes. Create a presets database and integrate it into the XResources editor with dropdown/autocomplete functionality.
 
-Goal: Add full KosDWM support to KosXER including:
-1. Parser for KosDWM config.json
-2. Parser for the dynamic menu structure (folder-based menus)
-3. Editor widgets for both config and menus
-4. Integration with existing parser registry
+### Tasks (6):
+1. [pending] Create Presets Database Module
+   ID: 1784278852.7649128
 
-### Tasks (5):
-1. [completed] Create a parser for KosDWM's config.json file:
-- Parse JSON 
-   ID: 1784214762.1119437
-   Progress logs: 1 entries
+2. [pending] Add Preset Picker UI to XResources Editor
+   ID: 1784278866.8964527
 
-2. [completed] Create a parser for KosDWM's dynamic menu structure:
-- Parse
-   ID: 1784214766.6056743
+3. [pending] Add XTerm Restart Helper
+   ID: 1784278875.277739
 
-3. [completed] Create editor widget for KosDWM config.json:
-- Extend Editor
-   ID: 1784214771.5438101
+4. [pending] Add Smart Preset Detection
+   ID: 1784278879.0253866
 
-4. [completed] Create editor widget for KosDWM dynamic menus:
-- Extend Edit
-   ID: 1784214775.980242
+5. [pending] Update Documentation with XTerm Color Info
+   ID: 1784278894.905197
 
-5. [completed] Update the parser registry to include KosDWM:
-- Register Kos
-   ID: 1784214781.3090127
+6. [pending] Add User Custom Presets Support
+   ID: 1784278898.7501698
 
 ---
 

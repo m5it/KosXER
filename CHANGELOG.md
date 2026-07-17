@@ -5,6 +5,20 @@ All notable changes to KosXER will be documented in this file.
 ## [Unreleased]
 
 ### Added
+- **Intelligent Presets System** (`config/presets.py`)
+  - Auto-detects resource types from resource names (color, font, boolean)
+  - Color editor with picker + preset palette (16 terminal colors + common colors)
+  - Font editor with dropdown of common monospace fonts
+  - Boolean editor with true/false/yes/no/on/off options
+  - Preset picker dialog with search/filter across all categories
+  - Double-click resource to get smart editor based on name
+
+- **XTerm Helper Features**
+  - "New XTerm" button - launches fresh xterm with current resources
+  - "XTerm Tips" button - educational dialog explaining restart behavior
+  - Info label explaining why xterm needs restart to see changes
+  - Color reference table showing color0-color15 values
+
 - **Auto-Versioning System** (`AUTOVERSION.py`)
   - Single source of truth for version number
   - Git pre-commit hook automatically increments version
@@ -23,7 +37,7 @@ All notable changes to KosXER will be documented in this file.
   - Error handling for xrdb not found or syntax errors
 
 - **GUI Editors Implemented**
-  - XResources Editor with treeview, color picker, filter
+  - XResources Editor with treeview, color picker, filter, presets
   - OpenBox Menu Editor for menu.xml
   - Generic Key-Value Editor for .conf, .env, .rc files
   - KosDWM Config Editor
@@ -39,10 +53,12 @@ All notable changes to KosXER will be documented in this file.
 ### Changed
 - Refactored project structure with gui/, parsers/, config/ directories
 - Version now imported from AUTOVERSION.py throughout codebase
+- XResources editor now intelligently detects resource types
 
 ### Fixed
 - File browser now filters hidden files by default
 - Apply button disabled until file is saved
+- XTerm restart behavior now clearly documented
 
 ## [0.1.0] - 2026-07-15
 

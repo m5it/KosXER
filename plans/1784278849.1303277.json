@@ -1,0 +1,62 @@
+{
+  "id": "1784278849.1303277",
+  "title": "XResources Known Values Presets Feature",
+  "instructions": "Add a presets system for commonly used XResources values including colors, fonts, and booleans. Include XTerm restart helper since xterm needs restart to see changes. Create a presets database and integrate it into the XResources editor with dropdown/autocomplete functionality.",
+  "startTimestamp": 1784278849.1303303,
+  "endTimestamp": 1784279320.5196934,
+  "tasks": {
+    "1784278852.7649128": {
+      "id": "1784278852.7649128",
+      "status": "completed",
+      "instruction": "Create config/presets.py file containing:\n1. XTERM_COLORS dictionary with 16 standard terminal colors (color0-color15) including white (#ffffff), black (#000000), red, green, blue, etc.\n2. COMMON_FONTS list with popular monospace fonts (xft:Monospace, -*-courier-*, etc.)\n3. BOOLEAN_VALUES dictionary mapping common boolean strings (true/false, yes/no, on/off)\n4. XTERM_SPECIFIC dictionary with common xterm resource names and their typical values\n5. Helper function get_presets_for_resource(resource_name) that returns appropriate presets based on resource type (color, font, boolean, etc.)\n\nThe file should be importable and well-documented with docstrings.",
+      "startTimestamp": 1784278916.3603606,
+      "endTimestamp": 1784278949.189054,
+      "log": [
+        {
+          "timestamp": 1784278916.3604772,
+          "text": "Build started"
+        }
+      ]
+    },
+    "1784278866.8964527": {
+      "id": "1784278866.8964527",
+      "status": "completed",
+      "instruction": "Modify gui/xresources_editor.py to add:\n1. \"Insert Preset\" button next to Add Resource button\n2. _show_preset_picker() method that opens a dialog with categorized presets (Colors, Fonts, Booleans)\n3. Use ttk.Combobox or Listbox for preset selection organized by category\n4. Insert selected preset into the current resource or add new resource with preset value\n5. Include search/filter in preset picker to find values quickly\n\nThe preset picker should be a modal dialog with OK/Cancel buttons.",
+      "startTimestamp": 1784278949.1890569,
+      "endTimestamp": 1784279011.680384,
+      "log": []
+    },
+    "1784278875.277739": {
+      "id": "1784278875.277739",
+      "status": "completed",
+      "instruction": "Modify gui/xresources_editor.py to add:\n1. \"New XTerm\" button that launches a fresh xterm instance with current XResources loaded\n2. _launch_new_xterm() method using subprocess to run: xterm & (or uxterm &)\n3. Add tooltip or info label explaining that xterm needs restart to see changes\n4. Optional: \"XTerm Tips\" button showing dialog explaining:\n   - xrdb -merge only affects NEW xterm windows\n   - Running xterm instances keep old resources\n   - Solution: Close and reopen xterm, or use \"New XTerm\" button\n\nThis helps users understand why changes don't appear immediately.",
+      "startTimestamp": 1784279011.680385,
+      "endTimestamp": 1784279072.8580213,
+      "log": []
+    },
+    "1784278879.0253866": {
+      "id": "1784278879.0253866",
+      "status": "completed",
+      "instruction": "Enhance gui/xresources_editor.py with intelligent preset suggestions:\n1. When user edits a resource, detect resource type from name (e.g., \"*color\" suggests color picker, \"*font\" suggests fonts)\n2. Modify _edit_color() and _edit_generic() to show preset button when appropriate\n3. Add _detect_resource_type(resource_path) method that returns 'color', 'font', 'boolean', or 'generic'\n4. Show preset dropdown directly in edit dialog for quick value selection\n5. For color resources, show color presets alongside color picker\n\nThis makes the UI more intuitive by suggesting relevant values automatically.",
+      "startTimestamp": 1784279072.8580222,
+      "endTimestamp": 1784279153.6045454,
+      "log": []
+    },
+    "1784278894.905197": {
+      "id": "1784278894.905197",
+      "status": "completed",
+      "instruction": "Update documentation files with new feature information:\n1. Update README.md - Add section about Presets feature and XTerm restart behavior\n2. Update CHANGELOG.md - Add entry for Known Values Presets feature\n3. Add XTerm color reference table showing color0-color15 values (including white #ffffff)\n4. Document how to use the preset picker in the XResources editor\n5. Add troubleshooting section explaining why xterm changes require restart\n\nInclude practical examples like \"How to set xterm white background: XTerm*background: #ffffff\"",
+      "startTimestamp": 1784279153.604546,
+      "endTimestamp": 1784279198.635499,
+      "log": []
+    },
+    "1784278898.7501698": {
+      "id": "1784278898.7501698",
+      "status": "in_progress",
+      "instruction": "Create system for user-defined custom presets:\n1. Add methods to save/load user presets from config file (~/.config/kosxer/user_presets.json)\n2. Add \"Save as Preset\" button in edit dialog to save current value as custom preset\n3. Show user presets in preset picker under \"My Presets\" category\n4. Add management dialog to view/delete user presets\n5. Ensure custom presets persist between application sessions\n\nThis allows users to build their own library of frequently used values.",
+      "startTimestamp": 1784279198.6355,
+      "endTimestamp": null,
+      "log": []
+    }
+  }
+}
