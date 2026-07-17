@@ -3,11 +3,14 @@
 XResources Editor Widget for KosXER
 
 Treeview-based editor for .Xresources and .Xdefaults files.
+Includes Apply button to reload resources with xrdb.
 """
 
 import tkinter as tk
 from tkinter import ttk, colorchooser, messagebox, simpledialog
 import re
+import subprocess
+import os
 from typing import Optional, List
 
 from gui.editor_base import EditorWidget
@@ -69,6 +72,11 @@ class XResourcesEditor(EditorWidget):
         
         ttk.Button(btn_frame, text="Add Resource", command=self._add_resource).pack(side=tk.LEFT, padx=5)
         ttk.Button(btn_frame, text="Delete Selected", command=self._delete_selected).pack(side=tk.LEFT, padx=5)
+        
+        # Apply button (reloads X resources)
+        self.apply_btn = ttk.Button(btn_frame, text="Apply (xrdb)", command=self._apply_resources, 
+                                    state=tk.DISABLED)
+        self.apply_btn.pack(side=tk.RIGHT, padx=5)
         
         # Bindings
         self.tree.bind('<Double-1>', self._on_double_click)
@@ -262,6 +270,45 @@ class XResourcesEditor(EditorWidget):
                 self._populate_tree()
                 self.set_status(f"Deleted {resource_path}")
     
+    def _apply_resources(self):
+        """Apply X resources using xrdb command."""
+        if not self.filepath:
+            messagebox.showerror("Error", "No file path set. Save the file first.")
+            return
+        
+        # Check if file exists
+        if not os.path.exists(self.filepath):
+            messagebox.showerror("Error", f"File not found: {self.filepath}\nSave before applying.")
+            return
+        
+        try:
+            # Run xrdb to load the resources
+            result = subprocess.run(
+                ['xrdb', '-merge', self.filepath],
+                capture_output=True,
+                text=True,
+                check=True
+            )
+            
+            self.set_status(f"✓ Applied: {self.filepath}")
+            messagebox.showinfo("Success", f"X resources applied successfully!\n\nFile: {self.filepath}")
+            
+        except subprocess.CalledProcessError as e:
+            error_msg = e.stderr if e.stderr else str(e)
+            messagebox.showerror("xrdb Error", f"Failed to apply resources:\n{error_msg}")
+            self.set_status(f"✗ Apply failed: {error_msg[:50]}...")
+        except FileNotFoundError:
+            messagebox.showerror("xrdb Not Found", 
+                                "xrdb command not found.\n\n"
+                                "Make sure you're running on an X11 system with xrdb installed.")
+    
+    def _update_apply_button(self):
+        """Enable/disable apply button based on file existence."""
+        if self.filepath and os.path.exists(self.filepath):
+            self.apply_btn.config(state=tk.NORMAL)
+        else:
+            self.apply_btn.config(state=tk.DISABLED)
+    
     def _on_delete_key(self, event):
         """Handle delete key."""
         self._delete_selected()
@@ -279,6 +326,7 @@ class XResourcesEditor(EditorWidget):
         self._original_data = data
         self._populate_tree()
         self.mark_dirty(False)
+        self._update_apply_button()
         self.set_status(f"Loaded {len(self.entries)} resources")
     
     def get_data(self) -> str:
