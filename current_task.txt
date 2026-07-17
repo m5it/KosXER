@@ -1,4 +1,4 @@
-Plan: KosXER Critical Bug Fixes - Release Preparation
+Plan: Add Dropdown Support for Resource Path and Value in XResources Editor
 Progress: 10/10 completed (0 blocked)
 No task in progress.
-Updated: 2026-07-17 12:16:42
+Updated: 2026-07-17 16:28:11

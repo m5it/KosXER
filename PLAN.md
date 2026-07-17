@@ -1,41 +1,41 @@
-# Plan: KosXER Critical Bug Fixes - Release Preparation
-## ID: 1784290008.7139344
-## Created: 2026-07-17 12:06:48
+# Plan: Add Dropdown Support for Resource Path and Value in XResources Editor
+## ID: 1784304668.4396105
+## Created: 2026-07-17 16:11:08
 ## Status: in_progress
 
 ### Goal:
-Fix three critical issues in KosXER: (1) Duplicate add/delete operations, (2) Save not working properly, (3) New code not visible. Prepare for new release with proper testing.
+Enhance the XResources editor to provide dropdown suggestions for both resource path and resource value when adding new resources. This improves visual understanding and user experience by showing available preset values and common resource paths.
 
 ### Tasks (10):
-1. [pending] Task 1: Fix Duplicate Add Operation in KV Editor
-   ID: 1784290020.463886
+1. [pending] Analyze current _add_resource implementation
+   ID: 1784304671.7604504
 
-2. [pending] Task 2: Fix Duplicate Delete Operation in KV Editor
-   ID: 1784290020.464066
+2. [pending] Create resource path dropdown with common XResources paths
+   ID: 1784304674.9885967
 
-3. [pending] Task 3: Fix Duplicate Add/Delete in XResources Editor
-   ID: 1784290020.4651213
+3. [pending] Create resource value dropdown with preset values
+   ID: 1784304677.3276908
 
-4. [pending] Task 4: Fix Save Functionality - Editor Callback Integration
-   ID: 1784290020.46523
+4. [pending] Implement dynamic value dropdown updates based on path selection
+   ID: 1784304682.091861
 
-5. [pending] Task 5: Fix Save - Ensure Proper File Writing
-   ID: 1784290020.465332
+5. [pending] Add visual grouping and categorization for resource paths
+   ID: 1784304684.4855917
 
-6. [pending] Task 6: Fix New Code Not Visible - Module Import Issues
-   ID: 1784290020.465443
+6. [pending] Add color preview in value dropdown for color resources
+   ID: 1784304686.7170074
 
-7. [pending] Task 7: Fix New Code Not Visible - Editor Registration
-   ID: 1784290020.4655583
+7. [pending] Add search/filter functionality for dropdown values
+   ID: 1784304750.1408985
 
-8. [pending] Task 8: Add Debug Logging for Troubleshooting
-   ID: 1784290020.465672
+8. [pending] Update _edit_selected dialog with same dropdown enhancements
+   ID: 1784304752.4279182
 
-9. [pending] Task 9: Create Test Suite for Critical Operations
-   ID: 1784290020.465785
+9. [pending] Add keyboard shortcuts and accessibility improvements
+   ID: 1784304754.425091
 
-10. [pending] Task 10: Update Version and Changelog for Release
-   ID: 1784290020.4659138
+10. [pending] Test the new dropdown functionality
+   ID: 1784304756.6707225
 
 ---
 
