@@ -127,12 +127,31 @@ class GenericKVParser:
                 value = self._unescape_value(self._unquote(kv_match.group(2).strip()))
                 self._add_entry(key, value, pending_comment, line_num, line, is_export=False)
                 pending_comment = None
-                i += 1
-                continue
-            
-            i += 1
+    def set(self, key: str, value: str, is_export: bool = False):
+        """Set or add a key-value pair."""
+        for entry in self.entries:
+            if entry.key == key:
+                entry.value = value
+                entry.is_export = is_export
+                return
+        # Add new
+        self.entries.append(KVEntry(key=key, value=value, is_export=is_export))
+    
+    def add_entry(self, key: str, value: str, is_export: bool = False) -> KVEntry:
+        """
+        Add a new key-value entry.
         
-        return self.entries
+        Args:
+            key: The key
+            value: The value
+            is_export: Whether to export (bash-style)
+            
+        Returns:
+            The created KVEntry
+        """
+        entry = KVEntry(key=key, value=value, is_export=is_export)
+        self.entries.append(entry)
+        return entry
     
     def _add_entry(self, key: str, value: str, comment: Optional[str],
                    line_number: int, raw_line: str, is_export: bool = False):

@@ -6,6 +6,7 @@ Simple two-column editor for KEY=value files.
 Good for .env files, simple configs, shell exports, etc.
 """
 
+import logging
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 from typing import Optional, List, Dict
@@ -13,6 +14,7 @@ from typing import Optional, List, Dict
 from gui.editor_base import EditorWidget
 from parsers.generic_kv_parser import GenericKVParser, KVEntry
 
+logger = logging.getLogger('kosxer.kv_editor')
 
 class KVEditor(EditorWidget):
     """
@@ -31,6 +33,8 @@ class KVEditor(EditorWidget):
         self.entries: List[KVEntry] = []
         self.filtered_entries: List[KVEntry] = []
         self._edit_popup: Optional[tk.Toplevel] = None
+        self._dialog_open = False  # Prevent duplicate dialogs
+        self._delete_in_progress = False  # Prevent duplicate deletes
         
         super().__init__(parent, main_window, filepath, **kwargs)
     
@@ -118,14 +122,6 @@ class KVEditor(EditorWidget):
                 e for e in self.entries 
                 if filter_text in e.key.lower() or filter_text in e.value.lower()
             ]
-        
-        self._populate_tree()
-        self.set_status(f"Showing {len(self.filtered_entries)} of {len(self.entries)} entries")
-    
-    def _clear_filter(self):
-        """Clear filter."""
-        self.filter_var.set('')
-        self.filtered_entries = self.entries[:]
         self._populate_tree()
     
     def _on_double_click(self, event):
@@ -133,11 +129,14 @@ class KVEditor(EditorWidget):
         self._edit_selected()
     
     def _add_row(self):
-        """Add new key-value row."""
+        self._dialog_open = True
+        logger.info("Opening Add Entry dialog")
+        
         dialog = tk.Toplevel(self)
         dialog.title("Add Entry")
         dialog.transient(self)
         dialog.grab_set()
+        dialog.protocol("WM_DELETE_WINDOW", lambda: self._close_dialog(dialog))
         
         # Key field
         ttk.Label(dialog, text="Key:").pack(anchor=tk.W, padx=10, pady=2)
@@ -153,17 +152,100 @@ class KVEditor(EditorWidget):
         export_var = tk.BooleanVar(value=False)
         ttk.Checkbutton(dialog, text="Export (bash)", variable=export_var).pack(anchor=tk.W, padx=10, pady=5)
         
+        # Track if already processed to prevent double-add
+        self._add_processed = False
+        
         def on_ok():
+            # Prevent double execution
+            if self._add_processed:
+                logger.warning("Add OK already processed, ignoring")
+                return
+            self._add_processed = True
+            
             key = key_var.get().strip()
             value = value_var.get().strip()
             
             if not key:
                 messagebox.showerror("Error", "Key is required")
+                self._add_processed = False
                 return
             
             # Check for duplicate
             if any(e.key == key for e in self.entries):
                 messagebox.showerror("Error", f"Key '{key}' already exists")
+                self._add_processed = False
+                return
+            
+            entry = KVEntry(key=key, value=value, is_export=export_var.get())
+            self.entries.append(entry)
+            self.filtered_entries = self.entries[:]
+            self.mark_dirty(True)
+            self._populate_tree()
+            logger.info(f"Added entry: {key}={value}")
+            self.set_status(f"Added: {key}")
+            self._close_dialog(dialog)
+        
+        btn_frame = ttk.Frame(dialog)
+        btn_frame.pack(pady=10)
+        ttk.Button(btn_frame, text="OK", command=on_ok).pack(side=tk.LEFT, padx=5)
+    def _delete_selected(self):
+        """Delete selected row(s)."""
+        # Prevent concurrent delete operations
+        if self._delete_in_progress:
+            logger.debug("Delete already in progress, ignoring")
+            return
+        self._delete_in_progress = True
+        
+        try:
+            selection = self.tree.selection()
+            if not selection:
+                messagebox.showwarning("No Selection", "Please select a row to delete")
+                return
+            
+            if messagebox.askyesno("Confirm", "Delete selected row(s)?"):
+                deleted_count = 0
+                deleted_keys = []
+                for item_id in selection:
+                    values = self.tree.item(item_id, 'values')
+                    key = values[0]
+                    
+                    # Remove from entries
+                    original_len = len(self.entries)
+                    self.entries = [e for e in self.entries if e.key != key]
+                    if len(self.entries) < original_len:
+                        deleted_count += 1
+                        deleted_keys.append(key)
+                
+                if deleted_count > 0:
+                    self.filtered_entries = self.entries[:]
+                    self.mark_dirty(True)
+                    self._populate_tree()
+                    logger.info(f"Deleted {deleted_count} entries: {', '.join(deleted_keys)}")
+                    self.set_status(f"Deleted {deleted_count} row(s)")
+        finally:
+            self._delete_in_progress = False
+        
+        # Track if already processed to prevent double-add
+        self._add_processed = False
+        
+        def on_ok():
+            # Prevent double execution
+            if self._add_processed:
+                return
+            self._add_processed = True
+            
+            key = key_var.get().strip()
+            value = value_var.get().strip()
+            
+            if not key:
+                messagebox.showerror("Error", "Key is required")
+                self._add_processed = False
+                return
+            
+            # Check for duplicate
+            if any(e.key == key for e in self.entries):
+                messagebox.showerror("Error", f"Key '{key}' already exists")
+                self._add_processed = False
                 return
             
             entry = KVEntry(key=key, value=value, is_export=export_var.get())
@@ -172,37 +254,66 @@ class KVEditor(EditorWidget):
             self.mark_dirty(True)
             self._populate_tree()
             self.set_status(f"Added: {key}")
-            dialog.destroy()
+            self._close_dialog(dialog)
         
         btn_frame = ttk.Frame(dialog)
         btn_frame.pack(pady=10)
         ttk.Button(btn_frame, text="OK", command=on_ok).pack(side=tk.LEFT, padx=5)
-        ttk.Button(btn_frame, text="Cancel", command=dialog.destroy).pack(side=tk.LEFT, padx=5)
+        ttk.Button(btn_frame, text="Cancel", command=lambda: self._close_dialog(dialog)).pack(side=tk.LEFT, padx=5)
+        
+        # Center dialog
+        dialog.update_idletasks()
+        x = self.winfo_rootx() + (self.winfo_width() - dialog.winfo_width()) // 2
+        y = self.winfo_rooty() + (self.winfo_height() - dialog.winfo_height()) // 2
+        dialog.geometry(f"+{x}+{y}")
+    
+    def _close_dialog(self, dialog):
+        """Close dialog and reset flag."""
+        self._dialog_open = False
+        dialog.destroy()
     
     def _delete_selected(self):
         """Delete selected row(s)."""
-        selection = self.tree.selection()
-        if not selection:
-            messagebox.showwarning("No Selection", "Please select a row to delete")
+        # Prevent concurrent delete operations
+        if self._delete_in_progress:
             return
+        self._delete_in_progress = True
         
-        if messagebox.askyesno("Confirm", "Delete selected row(s)?"):
-            for item_id in selection:
-                values = self.tree.item(item_id, 'values')
-                key = values[0]
-                
-                # Remove from entries
-                self.entries = [e for e in self.entries if e.key != key]
+        try:
+            selection = self.tree.selection()
+            if not selection:
+                messagebox.showwarning("No Selection", "Please select a row to delete")
+                return
             
-            self.filtered_entries = self.entries[:]
-            self.mark_dirty(True)
-            self._populate_tree()
-            self.set_status(f"Deleted {len(selection)} row(s)")
+            if messagebox.askyesno("Confirm", "Delete selected row(s)?"):
+                deleted_count = 0
+                for item_id in selection:
+                    values = self.tree.item(item_id, 'values')
+                    key = values[0]
+                    
+                    # Remove from entries - only delete if key exists
+                    original_len = len(self.entries)
+                    self.entries = [e for e in self.entries if e.key != key]
+                    if len(self.entries) < original_len:
+                        deleted_count += 1
+                
+                if deleted_count > 0:
+                    self.filtered_entries = self.entries[:]
+                    self.mark_dirty(True)
+                    self._populate_tree()
+                    self.set_status(f"Deleted {deleted_count} row(s)")
+        finally:
+            self._delete_in_progress = False
     
     def _edit_selected(self):
         """Edit selected row."""
+        if self._dialog_open:
+            return
+        self._dialog_open = True
+        
         selection = self.tree.selection()
         if not selection:
+            self._dialog_open = False
             return
         
         item_id = selection[0]
@@ -214,12 +325,14 @@ class KVEditor(EditorWidget):
         # Find entry
         entry = next((e for e in self.entries if e.key == old_key), None)
         if not entry:
+            self._dialog_open = False
             return
         
         dialog = tk.Toplevel(self)
         dialog.title("Edit Entry")
         dialog.transient(self)
         dialog.grab_set()
+        dialog.protocol("WM_DELETE_WINDOW", lambda: self._close_dialog(dialog))
         
         # Key field
         ttk.Label(dialog, text="Key:").pack(anchor=tk.W, padx=10, pady=2)
@@ -256,12 +369,18 @@ class KVEditor(EditorWidget):
             self.mark_dirty(True)
             self._on_filter_changed()
             self.set_status(f"Updated: {new_key}")
-            dialog.destroy()
+            self._close_dialog(dialog)
         
         btn_frame = ttk.Frame(dialog)
         btn_frame.pack(pady=10)
         ttk.Button(btn_frame, text="OK", command=on_ok).pack(side=tk.LEFT, padx=5)
-        ttk.Button(btn_frame, text="Cancel", command=dialog.destroy).pack(side=tk.LEFT, padx=5)
+        ttk.Button(btn_frame, text="Cancel", command=lambda: self._close_dialog(dialog)).pack(side=tk.LEFT, padx=5)
+        
+        # Center dialog
+        dialog.update_idletasks()
+        x = self.winfo_rootx() + (self.winfo_width() - dialog.winfo_width()) // 2
+        y = self.winfo_rooty() + (self.winfo_height() - dialog.winfo_height()) // 2
+        dialog.geometry(f"+{x}+{y}")
     
     def _import_file(self):
         """Import from another file."""

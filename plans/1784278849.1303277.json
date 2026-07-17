@@ -1,7 +1,7 @@
 {
   "id": "1784278849.1303277",
-  "title": "XResources Known Values Presets Feature",
-  "instructions": "Add a presets system for commonly used XResources values including colors, fonts, and booleans. Include XTerm restart helper since xterm needs restart to see changes. Create a presets database and integrate it into the XResources editor with dropdown/autocomplete functionality.",
+  "title": "Fix XResources Editor Critical Bugs",
+  "instructions": "Fix three critical bugs in the XResources editor:\n1. Duplicate add/delete - resources added/deleted twice\n2. Save not working - get_data() not properly serializing\n3. UI not updating - tree refresh issues\n\nThese bugs make the editor unusable. Need systematic fixes with verification.",
   "startTimestamp": 1784278849.1303303,
   "endTimestamp": 1784279320.5196934,
   "tasks": {
@@ -13,7 +13,7 @@
       "endTimestamp": 1784278949.189054,
       "log": [
         {
-          "timestamp": 1784278916.3604772,
+          "timestamp": 1784279806.4174192,
           "text": "Build started"
         }
       ]
@@ -55,6 +55,35 @@
       "status": "in_progress",
       "instruction": "Create system for user-defined custom presets:\n1. Add methods to save/load user presets from config file (~/.config/kosxer/user_presets.json)\n2. Add \"Save as Preset\" button in edit dialog to save current value as custom preset\n3. Show user presets in preset picker under \"My Presets\" category\n4. Add management dialog to view/delete user presets\n5. Ensure custom presets persist between application sessions\n\nThis allows users to build their own library of frequently used values.",
       "startTimestamp": 1784279198.6355,
+      "endTimestamp": null,
+      "log": []
+    },
+    "1784279881.3015246": {
+      "id": "1784279881.3015246",
+      "status": "in_progress",
+      "instruction": "Fix the bug where adding or deleting resources creates duplicates:\n\n1. Check gui/xresources_editor.py _add_resource() method\n2. Check if entries are being added to both self.entries AND parser.entries\n3. Check _delete_selected() for same issue\n4. Ensure only ONE list is the source of truth\n5. The bug is likely that both self.entries and parser.entries are being modified separately\n\nFix: Use parser.entries as single source of truth, remove self.entries duplication",
+      "startTimestamp": 1784279891.6154387,
+      "endTimestamp": null,
+      "log": [
+        {
+          "timestamp": 1784279891.615573,
+          "text": "Build started"
+        }
+      ]
+    },
+    "1784279885.2591743": {
+      "id": "1784279885.2591743",
+      "status": "pending",
+      "instruction": "Fix the save functionality bug:\n\n1. Check get_data() method in XResourcesEditor\n2. Check write_back() in XResourcesParser\n3. Verify that get_data() returns properly formatted XResources content\n4. Check if main window's save is calling get_data() correctly\n5. The bug may be that get_data() returns empty or malformed content\n\nFix: Ensure get_data() properly serializes all entries from parser",
+      "startTimestamp": null,
+      "endTimestamp": null,
+      "log": []
+    },
+    "1784279888.6369536": {
+      "id": "1784279888.6369536",
+      "status": "pending",
+      "instruction": "Fix the UI refresh bug where changes don't appear:\n\n1. Check _populate_tree() method\n2. Check if tree is properly cleared before repopulating\n3. Check if filtered_entries is properly updated\n4. Check if mark_dirty() is being called\n5. The bug may be that filtered_entries gets out of sync with entries\n\nFix: Ensure _populate_tree() clears and rebuilds from correct source, and filtered_entries is always in sync",
+      "startTimestamp": null,
       "endTimestamp": null,
       "log": []
     }

@@ -22,7 +22,7 @@ from pathlib import Path
 # =============================================================================
 # VERSION - Single Source of Truth
 # =============================================================================
-VERSION = "1.0.1"
+VERSION = "1.0.2"
 
 # Version file location (relative to this file)
 VERSION_FILE = Path(__file__).parent / "config" / "VERSION"

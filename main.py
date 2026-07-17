@@ -7,6 +7,9 @@ A GUI editor for .Xresources, OpenBox menu.xml, KosDWM, and other Unix desktop c
 
 import os
 import sys
+import shutil
+import argparse
+import logging
 from pathlib import Path
 from typing import Optional, Dict, Any
 
@@ -17,7 +20,10 @@ from tkinter import ttk, messagebox, filedialog
 from AUTOVERSION import VERSION
 from config.constants import APP_NAME
 from config.settings import Settings
+from utils.logging_config import setup_logging, log_operation, log_error, log_file_operation
 
+# Setup logging before other imports
+logger = setup_logging(level=logging.INFO)
 from parsers import (
     detect_parser, get_file_type_info,
     XResourcesParser, OpenBoxMenuParser, GenericKVParser,
@@ -191,46 +197,110 @@ Keyboard Shortcuts:
         
         self.status_file = ttk.Label(self.statusbar, text="No file open", anchor=tk.W, width=40)
         self.status_file.pack(side=tk.LEFT, padx=5)
-        
-        ttk.Separator(self.statusbar, orient=tk.VERTICAL).pack(side=tk.LEFT, fill=tk.Y, padx=5)
-        
-        self.status_parser = ttk.Label(self.statusbar, text="", width=25)
-        self.status_parser.pack(side=tk.LEFT, padx=5)
-        
-        self.status_modified = ttk.Label(self.statusbar, text="", foreground="red", width=10)
-        self.status_modified.pack(side=tk.LEFT, padx=5)
-        
-        self.status_pos = ttk.Label(self.statusbar, text="", anchor=tk.E, width=20)
-        self.status_pos.pack(side=tk.RIGHT, padx=5)
-    
-    def _bind_shortcuts(self):
-        """Bind keyboard shortcuts."""
-        self.root.bind("<Control-n>", lambda e: self._file_new())
-        self.root.bind("<Control-o>", lambda e: self._file_open())
-        self.root.bind("<Control-s>", lambda e: self._file_save())
-        self.root.bind("<Control-S>", lambda e: self._file_save_as())
-        self.root.bind("<Control-w>", lambda e: self._close_current_tab())
-        self.root.bind("<Control-b>", lambda e: self._toggle_file_browser())
-        self.root.bind("<Control-h>", lambda e: self._toggle_hidden_files())
-        self.root.bind("<F5>", lambda e: self._refresh_browser())
-        self.root.bind("<Control-q>", lambda e: self._on_close())
-    
-    def _toggle_hidden_files(self):
-        """Toggle hidden files display."""
-        current = self.show_hidden_var.get()
-        self.show_hidden_var.set(not current)
-        if hasattr(self, 'file_browser'):
-            self.file_browser.set_show_hidden(self.show_hidden_var.get())
-    
-    def _refresh_browser(self):
-        """Refresh file browser."""
-        if hasattr(self, 'file_browser'):
-            self.file_browser.refresh()
-    
     def _open_file(self, filepath: str):
         """Open a file."""
         filepath = str(filepath)
+        logger.info(f"Opening file: {filepath}")
         
+        # Check if already open
+        if filepath in self.open_files:
+            logger.debug(f"File already open: {filepath}")
+            for i, tab in enumerate(self.notebook.tabs()):
+                if self.notebook.tab(tab, "text") == Path(filepath).name:
+                    self.notebook.select(i)
+                    return
+        
+        try:
+            # Detect file type
+            parser_class = detect_parser(filepath)
+            if not parser_class:
+                logger.warning(f"Cannot determine file type: {filepath}")
+                messagebox.showerror("Error", f"Cannot determine file type: {filepath}")
+                return
+            
+            logger.info(f"Detected parser: {parser_class.__name__} for {filepath}")
+            
+            # Create appropriate editor
+            if parser_class == XResourcesParser:
+                editor = XResourcesEditor(self.notebook, self, filepath)
+            elif parser_class == OpenBoxMenuParser:
+                editor = OpenBoxEditor(self.notebook, self, filepath)
+            elif parser_class == GenericKVParser:
+                editor = KVEditor(self.notebook, self, filepath)
+            elif parser_class == KosDWMConfigParser:
+                editor = KosDWMConfigEditor(self.notebook, self, filepath)
+            elif parser_class == KosDWMMenuParser:
+                editor = KosDWMMenuEditor(self.notebook, self, filepath)
+            else:
+                logger.error(f"No editor for parser: {parser_class.__name__}")
+                messagebox.showerror("Error", f"No editor for: {filepath}")
+                return
+            
+            # Load file
+            self.set_status(f"Saved: {Path(self.current_file).name}")
+            
+            log_file_operation(logger, "SAVE", self.current_file, True)
+            
+        except Exception as e:
+            log_error(logger, "_file_save", e, f"filepath={self.current_file}")
+            messagebox.showerror("Save Error", f"Failed to save file:\n{str(e)}")
+            self.set_status(f"Save failed: {str(e)[:50]}")
+    
+    def set_status(self, message: str):
+            self._file_save_as()
+            return
+        
+        editor = self.open_files.get(self.current_file)
+        if not editor:
+            logger.error(f"No editor found for: {self.current_file}")
+            messagebox.showerror("Save Error", "No editor found for current file")
+            return
+        
+        try:
+            # Get content from editor
+            content = editor.get_data()
+            if content is None:
+                logger.error("Editor returned None for get_data()")
+                messagebox.showerror("Save Error", "Editor returned no data")
+                return
+            
+            logger.debug(f"Got {len(content)} bytes from editor")
+            
+            # Create backup if file exists
+            if os.path.exists(self.current_file):
+                backup_path = self.current_file + '.bak'
+                try:
+                    shutil.copy2(self.current_file, backup_path)
+                    logger.debug(f"Created backup: {backup_path}")
+                except Exception as e:
+                    logger.warning(f"Could not create backup: {e}")
+            
+            # Write file
+            with open(self.current_file, 'w', encoding='utf-8') as f:
+                f.write(content)
+            
+            # Verify write
+            if not os.path.exists(self.current_file):
+                raise IOError("File was not created after write")
+            
+            file_size = os.path.getsize(self.current_file)
+            logger.info(f"Saved {file_size} bytes to: {self.current_file}")
+            
+            # Update editor state
+            editor.mark_dirty(False)
+            editor.set_filepath(self.current_file)
+            
+            # Update UI
+            self.status_modified.config(text="✓ Saved")
+            self.root.after(2000, lambda: self.status_modified.config(text=""))
+            self.set_status(f"Saved: {Path(self.current_file).name}")
+            
+            log_file_operation(logger, "SAVE", self.current_file, True)
+            
+        except Exception as e:
+            log_error(logger, "_file_save", e, f"filepath={self.current_file}")
+            messagebox.showerror("Save Error", f"Failed to save file:\n{str(e)}")
+            self.set_status(f"Save failed: {str(e)[:50]}")
         # Check if already open
         if filepath in self.open_files:
             for i, tab in enumerate(self.notebook.tabs()):
@@ -308,26 +378,57 @@ Keyboard Shortcuts:
             self._open_file(filepath)
     
     def _file_save(self):
-        """Save current file."""
+        """Save current file with backup."""
         if not self.current_file:
             self._file_save_as()
             return
         
         editor = self.open_files.get(self.current_file)
         if not editor:
+            messagebox.showerror("Save Error", "No editor found for current file")
             return
         
         try:
+            # Get content from editor
             content = editor.get_data()
+            if content is None:
+                messagebox.showerror("Save Error", "Editor returned no data")
+                return
+            
+            # Create backup if file exists
+            if os.path.exists(self.current_file):
+                backup_path = self.current_file + '.bak'
+                try:
+                    shutil.copy2(self.current_file, backup_path)
+                except Exception as e:
+                    print(f"Warning: Could not create backup: {e}")
+            
+            # Write file
             with open(self.current_file, 'w', encoding='utf-8') as f:
                 f.write(content)
             
+            # Verify write
+            if not os.path.exists(self.current_file):
+                raise IOError("File was not created")
+            
+            # Update editor state
             editor.mark_dirty(False)
+            editor.set_filepath(self.current_file)
+            
+            # Update UI
             self.status_modified.config(text="✓ Saved")
             self.root.after(2000, lambda: self.status_modified.config(text=""))
+            self.set_status(f"Saved: {Path(self.current_file).name}")
             
         except Exception as e:
-            messagebox.showerror("Save Error", str(e))
+            messagebox.showerror("Save Error", f"Failed to save file:\n{str(e)}")
+            self.set_status(f"Save failed: {str(e)[:50]}")
+    
+    def set_status(self, message: str):
+        """Set status bar message."""
+        if hasattr(self, 'status_file'):
+            self.status_file.config(text=f"📄 {message}")
+        self.root.update_idletasks()
     
     def _file_save_as(self):
         """Save as dialog."""

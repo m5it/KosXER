@@ -1,0 +1,15 @@
+[2026-07-17 12:13:19] CMD: find . -name *.pyc -o -name __pycache__ | SUCCESS: True | OUTPUT_LEN: 43544
+[2026-07-17 12:13:19] CMD: python3 -m py_compile main.py | SUCCESS: True | OUTPUT_LEN: 112
+[2026-07-17 12:13:19] CMD: python3 -c import sys; sys.path.insert(0, '.'); from gui.kv_editor import KVEditor; print("KVEditor imports OK") | SUCCESS: True | OUTPUT_LEN: 20
+[2026-07-17 12:13:19] CMD: python3 -c import sys; sys.path.insert(0, '.'); from gui.xresources_editor import XResourcesEditor; print("XResourcesEditor imports OK") | SUCCESS: True | OUTPUT_LEN: 28
+[2026-07-17 12:13:19] CMD: python3 -c import sys; sys.path.insert(0, '.'); from gui.kosdwm_config_editor import KosDWMConfigEditor; print("KosDWMConfigEditor imports OK") | SUCCESS: True | OUTPUT_LEN: 30
+[2026-07-17 12:13:19] CMD: python3 -c import sys; sys.path.insert(0, '.'); from gui.kosdwm_menu_editor import KosDWMMenuEditor; print("KosDWMMenuEditor imports OK") | SUCCESS: True | OUTPUT_LEN: 28
+[2026-07-17 12:13:19] CMD: python3 -c import sys; sys.path.insert(0, '.'); from parsers import detect_parser; print("Parsers import OK") | SUCCESS: True | OUTPUT_LEN: 18
+[2026-07-17 12:13:31] CMD: rm -rf ./gui/__pycache__ ./parsers/__pycache__</arg3>
+<arg4>./config/__pycache__ | SUCCESS: True | OUTPUT_LEN: 0
+[2026-07-17 12:13:31] CMD: python3 -m py_compile main.py | SUCCESS: True | OUTPUT_LEN: 114
+[2026-07-17 12:14:28] CMD: python3 -m py_compile main.py | SUCCESS: True | OUTPUT_LEN: 0
+[2026-07-17 12:15:49] CMD: python3 test_critical_operations.py | SUCCESS: True | OUTPUT_LEN: 2511
+[2026-07-17 12:16:12] CMD: python3 -m py_compile main.py | SUCCESS: True | OUTPUT_LEN: 104
+[2026-07-17 12:16:12] CMD: python3 -m py_compile gui/kv_editor.py | SUCCESS: True | OUTPUT_LEN: 0
+[2026-07-17 12:16:42] CMD: python3 test_critical_operations.py | SUCCESS: False | OUTPUT_LEN: 7

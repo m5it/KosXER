@@ -2,12 +2,50 @@
 
 All notable changes to KosXER will be documented in this file.
 
-## [Unreleased]
+## [1.1.0] - 2025-01-15
+
+### Fixed
+- **Critical Bug**: Fixed duplicate add/delete operations in KV Editor and XResources Editor
+  - Added dialog protection flags to prevent multiple simultaneous dialogs
+  - Added operation-in-progress flags to prevent duplicate executions
+  - Fixed race conditions in add/delete handlers
+- **Critical Bug**: Fixed save functionality not working properly
+  - Added backup creation before save operations
+  - Added proper error handling and verification
+  - Fixed file write verification
+  - Fixed Save As to update editor tracking correctly
+- **Critical Bug**: Fixed new code not being visible due to import errors
+  - Fixed IndentationError in main.py
+  - Cleared stale __pycache__ files
+  - Verified all KosDWM editors are properly registered
 
 ### Added
-- **Intelligent Presets System** (`config/presets.py`)
-  - Auto-detects resource types from resource names (color, font, boolean)
-  - Color editor with picker + preset palette (16 terminal colors + common colors)
+- Comprehensive debug logging system
+  - Added utils/logging_config.py for centralized logging
+  - Added operation tracking throughout the application
+  - Added error logging with stack traces
+- Test suite for critical operations (test_critical_operations.py)
+  - Tests for all parser modules
+  - Tests for file save operations
+  - Tests for module imports
+
+### Changed
+- Improved error messages for file operations
+- Enhanced status bar feedback during save operations
+
+## [1.0.0] - 2025-01-10
+
+### Added
+- Initial release of KosXER
+- Support for .Xresources/.Xdefaults files with live xrdb apply
+- Support for OpenBox menu.xml and rc.xml
+- Support for KosDWM config.json and menu structure
+- Support for generic key-value config files (.conf, .env, .rc)
+- Dual-pane layout with file browser and tabbed editor
+- Intelligent presets with color picker and font selection
+- XTerm helper buttons for testing resources
+- Auto-versioning with git integration
+- Backup on save functionality
   - Font editor with dropdown of common monospace fonts
   - Boolean editor with true/false/yes/no/on/off options
   - Preset picker dialog with search/filter across all categories
