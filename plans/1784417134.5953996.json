@@ -1,0 +1,99 @@
+{
+  "id": "1784417134.5953996",
+  "title": "KosDWM Auto-Generative Menu Support",
+  "instructions": "Add full read/write/editor support for KosDWM's auto-generative menu folders. These menus live under ~/.config/KosDWM/Menus/ and each subfolder contains a config.json (with fields like windowContent, windowScript, loop, looptype) plus companion files such as content.html and ok.py. Preserve structure and comments on round-trip. Extend the KosXER GUI so users can browse, edit, validate, and save these auto-generative menu entries.",
+  "startTimestamp": 1784417134.595402,
+  "endTimestamp": 1784421122.1571019,
+  "tasks": {
+    "1784417875.0247803": {
+      "id": "1784417875.0247803",
+      "status": "completed",
+      "instruction": "Read every config.json, content.html, ok.py, and any other file under /home/t3ch/.config/KosDWM/Menus/ recursively, plus /home/t3ch/.config/KosDWM/xterm/ and /home/t3ch/.config/KosDWM/config.json. Document the exact schema, allowed values, and file relationships. This is the discovery task; no code changes.",
+      "startTimestamp": 1784417879.72262,
+      "endTimestamp": 1784417951.4141488,
+      "log": [
+        {
+          "timestamp": 1784417879.7227292,
+          "text": "Build started"
+        }
+      ]
+    },
+    "1784417875.0249612": {
+      "id": "1784417875.0249612",
+      "status": "completed",
+      "instruction": "Based on the inspected files, decide whether to extend KosDWMMenuParser or create a new KosDWMMenuAutoGenParser. Define dataclasses for AutoGenMenuConfig and AutoGenMenuItem. Design comment-preserving JSON read/write for config.json and a strategy for handling companion files (content.html, ok.py). Write the design as a short markdown note in docs/ or as comments at the top of the new parser file.",
+      "startTimestamp": 1784417951.414151,
+      "endTimestamp": 1784417993.6985645,
+      "log": []
+    },
+    "1784417875.0632682": {
+      "id": "1784417875.0632682",
+      "status": "completed",
+      "instruction": "Create parsers/comment_preserving_json.py with a class that can load JSON containing // and /* */ comments, remember them, and dump them back at the original line positions. Include unit tests in parsers/test_comment_preserving_json.py.",
+      "startTimestamp": 1784417993.6985664,
+      "endTimestamp": 1784418086.0382535,
+      "log": []
+    },
+    "1784417875.063413": {
+      "id": "1784417875.063413",
+      "status": "completed",
+      "instruction": "Create parsers/kosdwm_autogen_menu_parser.py that parses a KosDWM auto-generative menu directory. It should read each subfolder's config.json using the comment-preserving helper, load companion files (content.html, ok.py) as strings, expose editable properties (title, windowContent, windowScript, loop, looptype, etc.), and write everything back preserving structure and comments. Add a test file parsers/test_kosdwm_autogen_menu.py.",
+      "startTimestamp": 1784418086.0382552,
+      "endTimestamp": 1784418184.6020613,
+      "log": []
+    },
+    "1784417875.0635374": {
+      "id": "1784417875.0635374",
+      "status": "completed",
+      "instruction": "Update gui/kosdwm_menu_editor.py (or create gui/kosdwm_autogen_menu_editor.py if cleaner) to open and edit auto-generative menu folders. Provide a treeview of menu folders, a properties panel for config.json fields, a text editor for content.html, and a Python editor for ok.py. Include validation (e.g., loop must be int, looptype in [second, minute, etc.]).",
+      "startTimestamp": 1784418184.6020632,
+      "endTimestamp": 1784418221.5909984,
+      "log": []
+    },
+    "1784417875.063657": {
+      "id": "1784417875.063657",
+      "status": "completed",
+      "instruction": "Update parsers/__init__.py to register the new auto-gen menu parser for paths matching KosDWM/Menus/*. Update main.py / gui/main_window.py / gui/file_browser.py so that double-clicking an auto-gen menu folder opens the new editor. Ensure the existing KosDWM config.json editor still works.",
+      "startTimestamp": 1784418221.5909994,
+      "endTimestamp": 1784421092.054094,
+      "log": [
+        {
+          "timestamp": 1784421089.270612,
+          "text": "Registered KosDWMMenuAutoGenParser in parsers/__init__.py with full-path matching, fixed get_item() bug in the parser, wired KosDWMAutogenMenuEditor into main.py, added save_to_disk hook to EditorWidget and auto-gen editor, updated file browser to open auto-gen menu folders, and verified imports/parser detection/tests."
+        }
+      ]
+    },
+    "1784417875.0637774": {
+      "id": "1784417875.0637774",
+      "status": "in_progress",
+      "instruction": "Run all parser tests and open /home/t3ch/.config/KosDWM/Menus/ in the GUI to verify editing and save round-trip. Update docs/FORMATS.md with the new KosDWM Auto-Generative Menu format. Update README.md supported formats table. Add a CHANGELOG.md entry.",
+      "startTimestamp": 1784421092.054095,
+      "endTimestamp": null,
+      "log": []
+    },
+    "1784420824.1908677": {
+      "id": "1784420824.1908677",
+      "status": "pending",
+      "instruction": "Update main.py: import KosDWMAutogenMenuEditor, add a branch in _open_file() to instantiate it when the detected parser is KosDWMMenuAutoGenParser, and handle save correctly. Because the editor's get_data() returns the Menus directory path, the normal file-write path will not work; instead call editor.parser.write_back() during save. Keep the existing KosDWM config.json editor working.",
+      "startTimestamp": null,
+      "endTimestamp": null,
+      "log": []
+    },
+    "1784420824.1910958": {
+      "id": "1784420824.1910958",
+      "status": "pending",
+      "instruction": "Update gui/file_browser.py so that directories containing a config.json and at least one of content.html / ok.py are recognized as KosDWM auto-gen menu folders and can be double-clicked to open in the editor. Do not break existing file detection.",
+      "startTimestamp": null,
+      "endTimestamp": null,
+      "log": []
+    },
+    "1784420824.192427": {
+      "id": "1784420824.192427",
+      "status": "pending",
+      "instruction": "Run parsers/test_kosdwm_autogen_menu.py and test_comment_preserving_json.py. Perform a smoke test by importing main.py and verifying the new editor class is reachable. Update docs/KOSDWM_AUTOGEN_DESIGN.md or README.md with a short note about the new editor. Update current_task.txt to reflect completion.",
+      "startTimestamp": null,
+      "endTimestamp": null,
+      "log": []
+    }
+  }
+}

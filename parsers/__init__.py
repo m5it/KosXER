@@ -20,6 +20,9 @@ from .openbox_parser import (
 from .generic_kv_parser import GenericKVParser, KVEntry
 from .kosdwm_config_parser import KosDWMConfigParser, KosDWMConfig
 from .kosdwm_menu_parser import KosDWMMenuParser, MenuItem, MenuFolder
+from .kosdwm_autogen_menu_parser import (
+    KosDWMMenuAutoGenParser, AutoGenMenuConfig, AutoGenMenuItem
+)
 
 
 class ParserInfo:

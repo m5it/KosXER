@@ -5,6 +5,8 @@
 ## Approved Directories
 .
 ../KosDWM/
+/home/t3ch/.config/KosDWM/
+~/.config/KosDWM/
 
 ## Approved Files
 

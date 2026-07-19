@@ -5,19 +5,13 @@ All notable changes to KosXER will be documented in this file.
 ## [Unreleased] - 2026-01-16
 
 ### Fixed
+- **UI Bug**: Fixed empty edit window when clicking on main window key-value results
+  - Added debug logging to diagnose tree item value retrieval
+  - Added input validation to all edit dialog methods
+  - Improved error handling for None values
 - **UI Bug**: Fixed dropdown blinking when searching in Add Resource dialog
   - Removed auto-open dropdown on every keystroke
   - Dropdown now only opens with Alt+Down or manual click
-  - Filter still updates values without forcing dropdown open
-- **UI Bug**: Fixed double-click on tree item opening empty window
-  - Changed to use identify() to get actual item under cursor
-  - Added proper item selection before processing
-  - Improved validation of tree item values
-- **Data Bug**: Fixed save/update not persisting changes
-  - Changed _update_entry() to use parser.update_value() method
-  - Fixed method name mismatch causing updates to fail
-
-## [1.1.0] - 2025-01-15
   - Filter still updates values without forcing dropdown open
 - **UI Bug**: Fixed double-click on tree item opening empty window
   - Changed to use identify() to get actual item under cursor

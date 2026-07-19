@@ -7,10 +7,16 @@ Parses KosDWM's dynamic menu structure from folder hierarchy:
 - config.json in folders defines menu properties
 - Python scripts (.py) define menu items with labels, icons, actions
 - Supports nested folders for menu hierarchy
+- Preserves comments in config.json files on read/write
 """
 
 import os
-import json
+import re
+from pathlib import Path
+from typing import Dict, List, Optional, Union, Any
+from dataclasses import dataclass, field, asdict
+
+from parsers.comment_preserving_json import CommentPreservingJSON
 import re
 from pathlib import Path
 from typing import Dict, List, Optional, Union, Any

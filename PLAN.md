@@ -1,41 +1,42 @@
-# Plan: Add Dropdown Support for Resource Path and Value in XResources Editor
-## ID: 1784304668.4396105
-## Created: 2026-07-17 16:11:08
+# Plan: KosDWM Auto-Generative Menu Support
+## ID: 1784417134.5953996
+## Created: 2026-07-18 23:25:34
 ## Status: in_progress
 
 ### Goal:
-Enhance the XResources editor to provide dropdown suggestions for both resource path and resource value when adding new resources. This improves visual understanding and user experience by showing available preset values and common resource paths.
+Add full read/write/editor support for KosDWM's auto-generative menu folders. These menus live under ~/.config/KosDWM/Menus/ and each subfolder contains a config.json (with fields like windowContent, windowScript, loop, looptype) plus companion files such as content.html and ok.py. Preserve structure and comments on round-trip. Extend the KosXER GUI so users can browse, edit, validate, and save these auto-generative menu entries.
 
 ### Tasks (10):
-1. [pending] Analyze current _add_resource implementation
-   ID: 1784304671.7604504
+1. [completed] Inspect all auto-generative menu files
+   ID: 1784417875.0247803
+   Progress logs: 1 entries
 
-2. [pending] Create resource path dropdown with common XResources paths
-   ID: 1784304674.9885967
+2. [completed] Design parser architecture
+   ID: 1784417875.0249612
 
-3. [pending] Create resource value dropdown with preset values
-   ID: 1784304677.3276908
+3. [completed] Implement comment-preserving JSON helper
+   ID: 1784417875.0632682
 
-4. [pending] Implement dynamic value dropdown updates based on path selection
-   ID: 1784304682.091861
+4. [completed] Implement auto-generative menu parser
+   ID: 1784417875.063413
 
-5. [pending] Add visual grouping and categorization for resource paths
-   ID: 1784304684.4855917
+5. [completed] Extend KosDWM menu editor for auto-gen menus
+   ID: 1784417875.0635374
 
-6. [pending] Add color preview in value dropdown for color resources
-   ID: 1784304686.7170074
+6. [in_progress] Register parser and editor in main app
+   ID: 1784417875.063657
 
-7. [pending] Add search/filter functionality for dropdown values
-   ID: 1784304750.1408985
+7. [pending] Test end-to-end and document
+   ID: 1784417875.0637774
 
-8. [pending] Update _edit_selected dialog with same dropdown enhancements
-   ID: 1784304752.4279182
+8. [pending] Wire auto-gen editor into main.py
+   ID: 1784420824.1908677
 
-9. [pending] Add keyboard shortcuts and accessibility improvements
-   ID: 1784304754.425091
+9. [pending] Enable file browser to open auto-gen menu folders
+   ID: 1784420824.1910958
 
-10. [pending] Test the new dropdown functionality
-   ID: 1784304756.6707225
+10. [pending] Test end-to-end and document
+   ID: 1784420824.192427
 
 ---
 

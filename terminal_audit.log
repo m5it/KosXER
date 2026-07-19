@@ -17,3 +17,23 @@
 [2026-07-17 15:56:39] CMD: python3 -m py_compile main.py | SUCCESS: True | OUTPUT_LEN: 0
 [2026-07-17 15:56:39] CMD: python3 -m py_compile gui/kv_editor.py | SUCCESS: True | OUTPUT_LEN: 0
 [2026-07-17 15:57:10] CMD: python3 test_critical_operations.py | SUCCESS: False | OUTPUT_LEN: 7
+[2026-07-18 23:33:39] CMD: ls -la ~/.config/KosDWM   | SUCCESS: True | OUTPUT_LEN: 222
+[2026-07-18 23:38:53] CMD: find /home/t3ch/.config/KosDWM -type f  | SUCCESS: True | OUTPUT_LEN: 48
+[2026-07-18 23:38:57] CMD: find /home/t3ch/.config/KosDWM -type f -print | SUCCESS: True | OUTPUT_LEN: 559
+[2026-07-18 23:39:02] CMD: ls -la /home/t3ch/.config/KosDWM/xterm | SUCCESS: True | OUTPUT_LEN: 95
+[2026-07-18 23:41:11] CMD: python -c from parsers.kosdwm_menu_autogen_parser import KosDWMMenuAutoGenParser; p=KosDWMMenuAutoGenParser(); items=p.parse('/home/t3ch/.config/KosDWM/Menus'); print(f'Found {len(items)} items'); [print(f'  {it.name}: {it.config.to_dict()}') for it in items]; valid,errs=p.validate(); print('valid=',valid,errs)   | SUCCESS: False | OUTPUT_LEN: 9
+[2026-07-18 23:41:14] CMD: venv/bin/python -c from parsers.kosdwm_menu_autogen_parser import KosDWMMenuAutoGenParser; p = KosDWMMenuAutoGenParser(); items = p.parse('/home/t3ch/.config/KosDWM/Menus'); print('Items:', [i.name for i in items]); print('Valid:', p.validate()) | SUCCESS: False | OUTPUT_LEN: 0
+[2026-07-18 23:41:17] CMD: python3 parsers/test_comment_preserving_json.py | SUCCESS: True | OUTPUT_LEN: 657
+[2026-07-18 23:41:57] CMD: python3 parsers/test_kosdwm_autogen_menu.py | SUCCESS: True | OUTPUT_LEN: 1819
+[2026-07-18 23:42:01] CMD: python3 -c from parsers.kosdwm_autogen_menu_parser import KosDWMMenuAutoGenParser; p=KosDWMMenuAutoGenParser(); items=p.parse('/home/t3ch/.config/KosDWM/Menus'); print('items:', len(items)); [print(i.name, i.folder_path) for i in items] | SUCCESS: True | OUTPUT_LEN: 604
+[2026-07-18 23:42:27] CMD: tail -n 120 parsers/kosdwm_autogen_menu_parser.py | SUCCESS: True | OUTPUT_LEN: 4214
+[2026-07-18 23:42:31] CMD: grep -n def _write_item\|def write_back\|folder_path = Path parsers/kosdwm_autogen_menu_parser.py | SUCCESS: True | OUTPUT_LEN: 198
+[2026-07-18 23:42:49] CMD: python3 parsers/test_kosdwm_autogen_menu.py | SUCCESS: True | OUTPUT_LEN: 502
+[2026-07-18 23:42:55] CMD: sed -n 280,320p parsers/kosdwm_autogen_menu_parser.py | SUCCESS: True | OUTPUT_LEN: 1079
+[2026-07-18 23:43:12] CMD: sed -n 220,400p gui/main_window.py | SUCCESS: True | OUTPUT_LEN: 1852
+[2026-07-18 23:43:38] CMD: python3 -c import sys; sys.path.insert(0, '.'); from gui.kosdwm_autogen_menu_editor import KosDWMAutoGenMenuEditor; print('import ok') | SUCCESS: True | OUTPUT_LEN: 656
+[2026-07-19 00:27:57] CMD: grep -n return len(errors)\|return self.items.get\|def validate\|def add_item parsers/kosdwm_autogen_menu_parser.py | SUCCESS: True | OUTPUT_LEN: 278
+[2026-07-19 00:30:24] CMD: sed -n 120,145p parsers/__init__.py | SUCCESS: True | OUTPUT_LEN: 891
+[2026-07-19 00:30:37] CMD: sed -n 131,140p parsers/__init__.py | SUCCESS: True | OUTPUT_LEN: 314
+[2026-07-19 00:30:42] CMD: grep -n KosDWM Menu parser\|def register\|__all__\|KosDWMMenuAutoGenParser parsers/__init__.py | SUCCESS: True | OUTPUT_LEN: 174
+[2026-07-19 00:31:34] CMD: python -m pytest parsers/ -v | SUCCESS: False | OUTPUT_LEN: 9

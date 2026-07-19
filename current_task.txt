@@ -1,4 +1,1 @@
-Plan: Add Dropdown Support for Resource Path and Value in XResources Editor
-Progress: 10/10 completed (0 blocked)
-No task in progress.
-Updated: 2026-07-17 17:26:37
+No active plan.

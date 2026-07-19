@@ -1162,6 +1162,14 @@ Remember: Save → Apply → New XTerm to see changes!"""
             return False, "Duplicate resource paths found"
         
         return True, ""
+        if not self.entries:
+            return False, "No resources defined"
+        
+        paths = [e.resource_path for e in self.entries]
+        if len(paths) != len(set(paths)):
+            return False, "Duplicate resource paths found"
+        
+        return True, ""
             
             if messagebox.askyesno("Confirm Delete", f"Delete {resource_path}?"):
                 # Remove from parser
